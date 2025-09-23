@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import {
   IonRouterOutlet,
   IonTabs,
@@ -18,15 +18,17 @@ const Tabs = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Route path="/feed" render={() => <Home />} exact={true} />
-        <Route path="/lists" render={() => <Lists />} exact={true} />
-        <Route
-          path="/lists/:listId"
-          render={() => <ListDetail />}
-          exact={true}
-        />
-        <Route path="/settings" render={() => <Settings />} exact={true} />
-        <Route path="" render={() => <Redirect to="/feed" />} exact={true} />
+        <Switch>
+          <Route path="/feed" render={() => <Home />} exact={true} />
+          <Route path="/lists" render={() => <Lists />} exact={true} />
+          <Route
+            path="/lists/:listId"
+            render={() => <ListDetail />}
+            exact={true}
+          />
+          <Route path="/settings" render={() => <Settings />} exact={true} />
+          <Route path="" render={() => <Redirect to="/feed" />} exact={true} />
+        </Switch>
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
         <IonTabButton tab="tab1" href="/feed">
