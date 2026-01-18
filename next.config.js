@@ -36,7 +36,6 @@ module.exports = {
     ],
     unoptimized: true,
   },
-  output: 'export',
   swcMinify: true,
   transpilePackages: [
     '@ionic/react',

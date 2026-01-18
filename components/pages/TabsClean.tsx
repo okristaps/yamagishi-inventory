@@ -17,6 +17,7 @@ import {
   IonCardContent,
 } from '@ionic/react';
 import { cube, flash, list, cog } from 'ionicons/icons';
+import InventoryReal from './InventoryReal';
 
 const TestPage: React.FC<{ title: string }> = ({ title }) => (
   <IonPage>
@@ -26,7 +27,7 @@ const TestPage: React.FC<{ title: string }> = ({ title }) => (
       </IonToolbar>
     </IonHeader>
     <IonContent>
-      <div className="p-4">
+      <div className="p-24">
         <IonCard>
           <IonCardContent>
             <h1>Test {title} Page</h1>
@@ -44,7 +45,7 @@ const TabsClean = () => {
     <IonTabs>
       <IonRouterOutlet>
         <Switch>
-          <Route path="/inventory" render={() => <TestPage title="Inventory" />} exact={true} />
+          <Route path="/inventory" render={() => <InventoryReal />} exact={true} />
           <Route path="/feed" render={() => <TestPage title="Feed" />} exact={true} />
           <Route path="/lists" render={() => <TestPage title="Lists" />} exact={true} />
           <Route path="/settings" render={() => <TestPage title="Settings" />} exact={true} />

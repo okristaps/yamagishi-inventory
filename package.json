@@ -18,24 +18,24 @@
     "presync": "npm run build",
     "sync": "npx cap sync",
     "android": "npx cap run android",
-    "android:dev": "ionic capacitor run android -l --external --livereload --consolelogs --serverlogs",
-    "ios": "npx cap run ios"
+    "android:dev": "ionic capacitor run android -l --external --livereload --consolelogs --serverlogs"
   },
   "dependencies": {
+    "@capacitor-community/sqlite": "6.0.2",
     "@capacitor/android": "6.2.1",
     "@capacitor/core": "6.2.1",
-    "@capacitor/ios": "7.4.5",
     "@capacitor/status-bar": "6.0.3",
     "@ionic/react": "7.7.4",
     "@ionic/react-router": "7.7.4",
     "classnames": "2.5.1",
-    "jeep-sqlite": "2.8.0",
     "next": "14.2.32",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router": "5.3.4",
     "react-router-dom": "5.3.4",
-    "react-virtuoso": "4.7.1"
+    "react-virtuoso": "4.7.1",
+    "reflect-metadata": "0.2.2",
+    "typeorm": "0.3.28"
   },
   "devDependencies": {
     "@capacitor/cli": "6.2.1",

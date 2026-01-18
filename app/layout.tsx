@@ -35,7 +35,7 @@ export default function RootLayout({
         <title>Yamagishi Inventory</title>
         <meta name="description" content="Inventory management app built with Ionic React" />
       </head>
-      <body>{children}</body>
+      <body suppressHydrationWarning={true}>{children}</body>
       <Script
         type="module"
         src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"

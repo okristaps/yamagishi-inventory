@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { databaseService } from '../database.config';
 import { Product, InventoryTransaction, TransactionType } from '../entities';
 
@@ -7,6 +6,7 @@ export class DatabaseInitService {
 
   public static async initialize(): Promise<void> {
     if (this.initialized) {
+      console.log('Database already initialized');
       return;
     }
 
@@ -16,14 +16,12 @@ export class DatabaseInitService {
       
       if (dataSource && dataSource.isInitialized) {
         console.log('Database initialized successfully');
-        console.log('Running migrations...');
         
-        await dataSource.runMigrations();
-        console.log('Migrations completed');
-
-        await this.seedSampleData(dataSource);
+        // Seed sample data if needed
+        await this.seedSampleData();
         
         this.initialized = true;
+        console.log('Database setup complete');
       } else {
         throw new Error('Failed to initialize database');
       }
@@ -33,8 +31,13 @@ export class DatabaseInitService {
     }
   }
 
-  private static async seedSampleData(dataSource: any): Promise<void> {
+  private static async seedSampleData(): Promise<void> {
     try {
+      const dataSource = databaseService.getDataSource();
+      if (!dataSource) {
+        throw new Error('DataSource not available');
+      }
+
       const productRepo = dataSource.getRepository(Product);
       const existingCount = await productRepo.count();
       
@@ -86,12 +89,12 @@ export class DatabaseInitService {
 
       for (const productData of sampleProducts) {
         const product = productRepo.create(productData);
-        await productRepo.save(product);
+        const savedProduct = await productRepo.save(product);
         
         // Create initial stock transaction
         const transactionRepo = dataSource.getRepository(InventoryTransaction);
         const transaction = transactionRepo.create({
-          productId: product.id,
+          productId: savedProduct.id,
           type: TransactionType.IN,
           quantity: productData.quantity,
           quantityBefore: 0,
@@ -100,6 +103,8 @@ export class DatabaseInitService {
           reference: 'SEED-DATA'
         });
         await transactionRepo.save(transaction);
+        
+        console.log(`Created product: ${productData.name} with ${productData.quantity} units`);
       }
 
       console.log('Sample data seeded successfully');
@@ -111,5 +116,20 @@ export class DatabaseInitService {
 
   public static async isInitialized(): Promise<boolean> {
     return this.initialized;
+  }
+
+  public static async resetDatabase(): Promise<void> {
+    try {
+      const dataSource = databaseService.getDataSource();
+      if (dataSource) {
+        await dataSource.dropDatabase();
+        await dataSource.synchronize();
+        console.log('Database reset successfully');
+        this.initialized = false;
+      }
+    } catch (error) {
+      console.error('Failed to reset database:', error);
+      throw error;
+    }
   }
 }
