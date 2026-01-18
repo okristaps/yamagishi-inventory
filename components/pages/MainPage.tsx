@@ -18,9 +18,9 @@ import {
   IonRefresherContent,
 } from '@ionic/react';
 import { add, cube, refresh } from 'ionicons/icons';
-import { User } from '../../src/database/entities';
-import { DatabaseService } from '../../src/database/typeorm.config';
-import { UserRepository } from '../../src/database/repositories/UserRepository';
+import { User } from '@/database/entities';
+import { DatabaseService } from '@/database/typeorm.config';
+import { UserRepository } from '@/repositories/UserRepository';
 
 const MainPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);

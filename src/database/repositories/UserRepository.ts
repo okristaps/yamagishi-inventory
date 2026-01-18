@@ -1,6 +1,6 @@
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
-import { User } from '../entities';
-import { AppDataSource, DatabaseService } from '../typeorm.config';
+import { User } from '@/database/entities';
+import { AppDataSource, DatabaseService } from '@/database/typeorm.config';
 
 export class UserRepository {
   private static async ensureInitialized(): Promise<void> {
