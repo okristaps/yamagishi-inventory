@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: false,
+  output: 'export',
+  trailingSlash: true,
   basePath: '',
+  experimental: {
+    esmExternals: 'loose',
+  },
   allowedDevOrigins: ['192.168.1.101'],
   webpack: (config, { isServer }) => {
     if (!isServer) {
