@@ -1,1 +1,0 @@
-export { InitialSetup1000000000000 } from './1000000000000-InitialSetup.migration';

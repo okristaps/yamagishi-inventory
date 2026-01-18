@@ -1,6 +1,6 @@
 {
 	"appId": "com.yamagishi.inventory",
-	"appName": "yamagishi-inventory",
+	"appName": "Yamagishi Inventory",
 	"bundledWebRuntime": false,
 	"npmClient": "npm",
 	"webDir": "out",

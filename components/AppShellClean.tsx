@@ -26,7 +26,7 @@ const AppShellClean: React.FC = () => {
   }
 
   return (
-    <IonApp>
+    <IonApp suppressHydrationWarning={true}>
       <IonReactRouter>
         <TabsClean />
       </IonReactRouter>

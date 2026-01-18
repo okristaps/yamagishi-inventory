@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -14,68 +14,57 @@ import {
   IonSpinner,
   IonButton,
   IonIcon,
-  IonBadge,
   IonRefresher,
   IonRefresherContent,
 } from '@ionic/react';
 import { add, cube, refresh } from 'ionicons/icons';
-import { Product, simpleDatabaseService } from '../../src/database/database-simple.config';
+import { User } from '../../src/database/entities';
+import { DatabaseService } from '../../src/database/typeorm.config';
+import { UserRepository } from '../../src/database/repositories/UserRepository';
 
 const InventoryReal: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    initializeAndLoadProducts();
-  }, []);
-
-  const initializeAndLoadProducts = async () => {
+  const loadUsers = useCallback(async () => {
     try {
-      setLoading(true);
-      setError(null);
+      console.log('Loading users...');
 
-      console.log('Starting database initialization...');
+      const allUsers = await UserRepository.find({ order: { id: 'ASC' } });
 
-      // Initialize database
-      await simpleDatabaseService.initialize();
-
-      // Load products
-      await loadProducts();
+      console.log(`Loaded ${allUsers.length} users`);
+      setUsers(allUsers);
     } catch (err) {
-      console.error('Failed to initialize app:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load inventory');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadProducts = async () => {
-    try {
-      console.log('Loading products...');
-
-      const allProducts = await simpleDatabaseService.getAllProducts();
-
-      console.log(`Loaded ${allProducts.length} products`);
-      setProducts(allProducts);
-    } catch (err) {
-      console.error('Failed to load products:', err);
+      console.error('Failed to load users:', err);
       throw err;
     }
-  };
+  }, []);
 
   const handleRefresh = async (event: any) => {
-    await loadProducts();
+    await loadUsers();
     event.detail.complete();
   };
 
-  const getStockStatus = (product: Product) => {
-    if (product.quantity <= 0) {
-      return { label: 'Out of Stock', color: 'danger' };
-    } else if (product.quantity <= product.minimumStock) {
-      return { label: 'Low Stock', color: 'warning' };
+  const handleAddUser = async () => {
+    try {
+      const name = prompt('User name:');
+      if (!name) return;
+
+      const email = prompt('Email (optional):');
+      const telephone = prompt('Telephone (optional):');
+
+      await UserRepository.save({
+        name,
+        email: email || undefined,
+        telephone: telephone || undefined
+      });
+
+      await loadUsers();
+    } catch (error) {
+      console.error('Failed to add user:', error);
+      alert('Failed to add user');
     }
-    return { label: 'In Stock', color: 'success' };
   };
 
   if (loading) {
@@ -83,14 +72,14 @@ const InventoryReal: React.FC = () => {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle className='bg-green'>Inventory</IonTitle>
+            <IonTitle className='bg-green'>Users</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
           <div className="flex justify-center items-center h-full">
             <div className="text-center">
               <IonSpinner name="crescent" />
-              <p className="mt-4">Initializing database and loading inventory...</p>
+              <p className="mt-4">Initializing database and loading users...</p>
             </div>
           </div>
         </IonContent>
@@ -103,18 +92,18 @@ const InventoryReal: React.FC = () => {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Inventory</IonTitle>
+            <IonTitle>Users</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
           <IonCard color="danger">
             <IonCardContent>
-              <h3>Error Loading Inventory</h3>
+              <h3>Error Loading Users</h3>
               <p>{error}</p>
               <IonButton
                 expand="block"
                 fill="outline"
-                onClick={initializeAndLoadProducts}
+                onClick={initializeAndLoadUsers}
                 className="mt-4"
               >
                 <IonIcon icon={refresh} slot="start" />
@@ -134,7 +123,7 @@ const InventoryReal: React.FC = () => {
           <IonTitle>
             <div className="flex items-center">
               <IonIcon icon={cube} className="mr-2" />
-              Inventory ({products.length})
+              Users ({users.length})
             </div>
           </IonTitle>
         </IonToolbar>
@@ -149,21 +138,21 @@ const InventoryReal: React.FC = () => {
             expand="block"
             className="mb-4"
             color="primary"
+            onClick={handleAddUser}
           >
             <IonIcon icon={add} slot="start" />
-            Add Product
+            Add User
           </IonButton>
 
-          {products.length === 0 ? (
+          {users.length === 0 ? (
             <IonCard>
               <IonCardContent className="text-center py-8">
                 <IonIcon icon={cube} size="large" color="medium" />
-                <h3 className="mt-4 mb-2">No Products Found</h3>
-                <p className="text-gray-500">Database initialized successfully but no products found</p>
+                <h3 className="mt-4 mb-2">No Users Found</h3>
+                <p className="text-gray-500">Database initialized successfully but no users found</p>
                 <IonButton
                   fill="outline"
                   className="mt-4"
-                  onClick={initializeAndLoadProducts}
                 >
                   <IonIcon icon={refresh} slot="start" />
                   Refresh
@@ -172,47 +161,29 @@ const InventoryReal: React.FC = () => {
             </IonCard>
           ) : (
             <IonList>
-              {products.map((product) => {
-                const stockStatus = getStockStatus(product);
-                return (
-                  <IonCard key={product.id} className="mb-4">
-                    <IonCardHeader>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <IonCardTitle className="text-lg">{product.name}</IonCardTitle>
-                          {product.description && (
-                            <p className="text-sm text-gray-600 mt-1">{product.description}</p>
-                          )}
-                        </div>
-                        <IonBadge color={stockStatus.color as any}>
-                          {stockStatus.label}
-                        </IonBadge>
+              {users.map((user) => (
+                <IonCard key={user.id} className="mb-4">
+                  <IonCardHeader>
+                    <IonCardTitle className="text-lg">{user.name}</IonCardTitle>
+                  </IonCardHeader>
+                  <IonCardContent>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <strong>ID:</strong> {user.id}
                       </div>
-                    </IonCardHeader>
-                    <IonCardContent>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <strong>SKU:</strong> {product.sku || 'N/A'}
-                        </div>
-                        <div>
-                          <strong>Quantity:</strong> {product.quantity}
-                        </div>
-                        <div>
-                          <strong>Price:</strong> ${product.price.toFixed(2)}
-                        </div>
-                        <div>
-                          <strong>Location:</strong> {product.location || 'N/A'}
-                        </div>
+                      <div>
+                        <strong>Email:</strong> {user.email || 'N/A'}
                       </div>
-                      {product.category && (
-                        <IonBadge color="light" className="mt-2">
-                          {product.category}
-                        </IonBadge>
-                      )}
-                    </IonCardContent>
-                  </IonCard>
-                );
-              })}
+                      <div>
+                        <strong>Telephone:</strong> {user.telephone || 'N/A'}
+                      </div>
+                      <div>
+                        <strong>Login PIN:</strong> {user.appsLoginPin ? '****' : 'N/A'}
+                      </div>
+                    </div>
+                  </IonCardContent>
+                </IonCard>
+              ))}
             </IonList>
           )}
         </div>

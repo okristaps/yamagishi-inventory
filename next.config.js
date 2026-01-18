@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  reactStrictMode: false,
   basePath: '',
   // Allow external access for mobile development
   // Allow cross-origin requests from development devices
@@ -21,8 +22,30 @@ module.exports = {
         assert: false,
         os: false,
         path: false,
+        child_process: false,
+        worker_threads: false,
+        'pg-native': false,
+        'better-sqlite3': false,
+        sqlite3: false,
+        'react-native-sqlite-storage': false,
+        '@sap/hana-client': false,
+        mysql: false,
+        mysql2: false,
+        oracledb: false,
+        'pg-query-stream': false,
+        'sql.js': false,
+        'typeorm-aurora-data-api-driver': false,
       };
     }
+    
+    // Exclude problematic TypeORM modules
+    config.externals = config.externals || [];
+    config.externals.push({
+      'utf-8-validate': 'commonjs utf-8-validate',
+      'bufferutil': 'commonjs bufferutil',
+      'encoding': 'commonjs encoding',
+    });
+    
     return config;
   },
   images: {

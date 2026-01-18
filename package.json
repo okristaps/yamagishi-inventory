@@ -18,7 +18,13 @@
     "presync": "npm run build",
     "sync": "npx cap sync",
     "android": "npx cap run android",
-    "android:dev": "ionic capacitor run android -l --external --livereload --consolelogs --serverlogs"
+    "android:dev": "ionic capacitor run android -l --external --livereload --consolelogs --serverlogs",
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d ormconfig.ts",
+    "migration:create": "typeorm-ts-node-commonjs migration:create",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d ormconfig.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d ormconfig.ts",
+    "schema:sync": "typeorm-ts-node-commonjs schema:sync -d ormconfig.ts",
+    "schema:drop": "typeorm-ts-node-commonjs schema:drop -d ormconfig.ts"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "6.0.2",
@@ -27,6 +33,7 @@
     "@capacitor/status-bar": "6.0.3",
     "@ionic/react": "7.7.4",
     "@ionic/react-router": "7.7.4",
+    "better-sqlite3": "12.6.2",
     "classnames": "2.5.1",
     "next": "14.2.32",
     "react": "18.2.0",
@@ -39,6 +46,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "6.2.1",
+    "@types/better-sqlite3": "7.6.13",
     "@types/jest": "29.5.12",
     "@types/node": "20.11.25",
     "@types/react": "18.2.64",
@@ -54,6 +62,7 @@
     "pullstate": "1.25",
     "reselect": "5.1.0",
     "tailwindcss": "3.4.1",
+    "ts-node": "10.9.2",
     "typescript": "5.4.2"
   }
 }
