@@ -1,0 +1,7 @@
+{
+  "name": "yamagishi-inventory",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

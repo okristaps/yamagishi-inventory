@@ -1,19 +1,20 @@
 import dynamic from 'next/dynamic';
-import { lists } from '../../mock';
 
-const App = dynamic(() => import('../../components/AppShell'), {
-  ssr: false,
-});
-
+// Required for static export
 export async function generateStaticParams() {
   return [
+    { all: [''] },
+    { all: ['inventory'] },
     { all: ['feed'] },
     { all: ['lists'] },
-    ...lists.map(list => ({ all: ['lists', list.id] })),
-    { all: ['settings'] },
+    { all: ['settings'] }
   ];
 }
 
+const AppShellClean = dynamic(() => import('../../components/AppShellClean'), {
+  ssr: false,
+});
+
 export default function Page() {
-  return <App />;
+  return <AppShellClean />;
 }

@@ -1,3 +1,4 @@
+'use client';
 import { TodoListItem } from '../../mock';
 import Store from '../../store';
 import * as selectors from '../../store/selectors';

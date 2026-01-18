@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import {
   IonRouterOutlet,
@@ -7,29 +8,39 @@ import {
   IonTabButton,
   IonIcon,
   IonLabel,
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
 } from '@ionic/react';
-import { cog, flash, list, cube } from 'ionicons/icons';
+import { cube, flash, list, cog } from 'ionicons/icons';
 
-import Home from './Feed';
-import Lists from './Lists';
-import ListDetail from './ListDetail';
-import Settings from './Settings';
-import InventorySimple from './InventorySimple';
+const TestPage: React.FC<{ title: string }> = ({ title }) => (
+  <IonPage>
+    <IonHeader>
+      <IonToolbar>
+        <IonTitle>{title}</IonTitle>
+      </IonToolbar>
+    </IonHeader>
+    <IonContent>
+      <div className="p-4">
+        <h1>Test {title} Page</h1>
+        <p>This is a minimal test page to isolate the null error.</p>
+      </div>
+    </IonContent>
+  </IonPage>
+);
 
-const Tabs = () => {
+const TabsMinimal = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
         <Switch>
-          <Route path="/inventory" render={() => <InventorySimple />} exact={true} />
-          <Route path="/feed" render={() => <Home />} exact={true} />
-          <Route path="/lists" render={() => <Lists />} exact={true} />
-          <Route
-            path="/lists/:listId"
-            render={() => <ListDetail />}
-            exact={true}
-          />
-          <Route path="/settings" render={() => <Settings />} exact={true} />
+          <Route path="/inventory" render={() => <TestPage title="Inventory" />} exact={true} />
+          <Route path="/feed" render={() => <TestPage title="Feed" />} exact={true} />
+          <Route path="/lists" render={() => <TestPage title="Lists" />} exact={true} />
+          <Route path="/settings" render={() => <TestPage title="Settings" />} exact={true} />
           <Route path="" render={() => <Redirect to="/inventory" />} exact={true} />
         </Switch>
       </IonRouterOutlet>
@@ -55,4 +66,4 @@ const Tabs = () => {
   );
 };
 
-export default Tabs;
+export default TabsMinimal;
