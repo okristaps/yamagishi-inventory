@@ -2,11 +2,8 @@
 module.exports = {
   reactStrictMode: false,
   basePath: '',
-  // Allow external access for mobile development
-  // Allow cross-origin requests from development devices
   allowedDevOrigins: ['192.168.1.101'],
   webpack: (config, { isServer }) => {
-    // Don't bundle server-side modules on client side
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -28,7 +25,9 @@ module.exports = {
         'better-sqlite3': false,
         sqlite3: false,
         'react-native-sqlite-storage': false,
+        'react-native': false,
         '@sap/hana-client': false,
+        '@sap/hana-client/extension/Stream': false,
         mysql: false,
         mysql2: false,
         oracledb: false,
@@ -37,15 +36,22 @@ module.exports = {
         'typeorm-aurora-data-api-driver': false,
       };
     }
-    
-    // Exclude problematic TypeORM modules
+
     config.externals = config.externals || [];
     config.externals.push({
       'utf-8-validate': 'commonjs utf-8-validate',
-      'bufferutil': 'commonjs bufferutil',
-      'encoding': 'commonjs encoding',
+      bufferutil: 'commonjs bufferutil',
+      encoding: 'commonjs encoding',
+      'react-native-sqlite-storage': 'commonjs react-native-sqlite-storage',
+      '@sap/hana-client/extension/Stream':
+        'commonjs @sap/hana-client/extension/Stream',
+      mysql: 'commonjs mysql',
     });
-    
+
+    config.module = config.module || {};
+    config.module.unknownContextCritical = false;
+    config.module.exprContextCritical = false;
+
     return config;
   },
   images: {

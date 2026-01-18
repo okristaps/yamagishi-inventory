@@ -22,7 +22,7 @@ import { User } from '../../src/database/entities';
 import { DatabaseService } from '../../src/database/typeorm.config';
 import { UserRepository } from '../../src/database/repositories/UserRepository';
 
-const InventoryReal: React.FC = () => {
+const MainPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -103,7 +103,6 @@ const InventoryReal: React.FC = () => {
               <IonButton
                 expand="block"
                 fill="outline"
-                onClick={initializeAndLoadUsers}
                 className="mt-4"
               >
                 <IonIcon icon={refresh} slot="start" />
@@ -192,4 +191,4 @@ const InventoryReal: React.FC = () => {
   );
 };
 
-export default InventoryReal;
+export default MainPage;
