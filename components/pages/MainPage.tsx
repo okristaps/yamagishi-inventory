@@ -19,16 +19,21 @@ import {
 } from '@ionic/react';
 import { add, cube, refresh } from 'ionicons/icons';
 import { User } from '@/database/entities';
-import { DatabaseService } from '@/database/typeorm.config';
 import { UserRepository } from '@/repositories/UserRepository';
+import { triggerCron } from '@/src/services/TriggerBasedCronService';
+import { Capacitor } from '@capacitor/core';
+import BackgroundSyncHistory from '@/components/BackgroundSyncHistory';
 
 const MainPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [triggerCronEnabled, setTriggerCronEnabled] = useState(false);
 
   const loadUsers = useCallback(async () => {
     try {
+      setLoading(true);
+      setError(null);
       console.log('Loading users...');
 
       const allUsers = await UserRepository.find({ order: { id: 'ASC' } });
@@ -37,9 +42,29 @@ const MainPage: React.FC = () => {
       setUsers(allUsers);
     } catch (err) {
       console.error('Failed to load users:', err);
-      throw err;
+      setError(err instanceof Error ? err.message : 'Failed to load users');
+    } finally {
+      setLoading(false);
     }
   }, []);
+
+  const initializeTriggerCron = useCallback(async () => {
+    try {
+      await triggerCron.initialize();
+      setTriggerCronEnabled(true);
+      console.log('✅ Trigger-based cron initialized successfully');
+      console.log('📝 Java service will send triggers every minute');
+      console.log('🎯 Ionic app will decide which tasks to run based on timing');
+    } catch (error) {
+      console.error('Failed to initialize trigger cron:', error);
+      setTriggerCronEnabled(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    initializeTriggerCron();
+    loadUsers();
+  }, [initializeTriggerCron, loadUsers]);
 
   const handleRefresh = async (event: any) => {
     await loadUsers();
@@ -104,6 +129,7 @@ const MainPage: React.FC = () => {
                 expand="block"
                 fill="outline"
                 className="mt-4"
+                onClick={loadUsers}
               >
                 <IonIcon icon={refresh} slot="start" />
                 Retry
@@ -120,9 +146,19 @@ const MainPage: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>
-            <div className="flex items-center">
-              <IonIcon icon={cube} className="mr-2" />
-              Users ({users.length})
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <IonIcon icon={cube} className="mr-2" />
+                Users ({users.length})
+              </div>
+              <div className="flex items-center text-sm">
+                <div className={`w-2 h-2 rounded-full mr-2 ${triggerCronEnabled ? 'bg-green-500' : 'bg-gray-400'
+                  }`}></div>
+                {Capacitor.isNativePlatform() ?
+                  (triggerCronEnabled ? 'Trigger Cron Active' : 'Trigger Cron Inactive') :
+                  'Web Mode'
+                }
+              </div>
             </div>
           </IonTitle>
         </IonToolbar>
@@ -152,6 +188,7 @@ const MainPage: React.FC = () => {
                 <IonButton
                   fill="outline"
                   className="mt-4"
+                  onClick={loadUsers}
                 >
                   <IonIcon icon={refresh} slot="start" />
                   Refresh
@@ -185,6 +222,10 @@ const MainPage: React.FC = () => {
               ))}
             </IonList>
           )}
+
+          <div className="mt-6">
+            <BackgroundSyncHistory />
+          </div>
         </div>
       </IonContent>
     </IonPage>

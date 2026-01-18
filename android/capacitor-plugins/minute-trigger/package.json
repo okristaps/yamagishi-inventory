@@ -1,0 +1,24 @@
+{
+  "name": "minute-trigger",
+  "version": "1.0.0",
+  "description": "Minute trigger plugin for background cron",
+  "main": "dist/plugin.js",
+  "module": "dist/esm/plugin.js",
+  "types": "dist/esm/plugin.d.ts",
+  "unpkg": "dist/plugin.js",
+  "capacitor": {
+    "android": {
+      "src": "android"
+    }
+  },
+  "files": [
+    "android/",
+    "dist/"
+  ],
+  "author": "Yamagishi Inventory",
+  "license": "MIT",
+  "devDependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0"
+  }
+}

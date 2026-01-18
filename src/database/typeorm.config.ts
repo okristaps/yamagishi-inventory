@@ -1,8 +1,9 @@
 import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { User } from './entities';
+import { User, BackgroundSync } from './entities';
 import sqliteParams from './sqliteParams';
 import { CreateUsersTable1768754422569 } from './migrations/1768754422569-CreateUsersTable';
+import { CreateBackgroundSyncTable1768761130612 } from './migrations/1768761130612-CreateBackgroundSyncTable';
 
 const dbName = 'yamagishi_inventory.db';
 
@@ -12,10 +13,10 @@ const dataSourceConfig: DataSourceOptions = {
   driver: sqliteParams.connection,
   database: dbName,
   mode: 'no-encryption',
-  entities: [User],
-  migrations: [CreateUsersTable1768754422569],
+  entities: [User, BackgroundSync],
+  migrations: [CreateUsersTable1768754422569, CreateBackgroundSyncTable1768761130612],
   synchronize: false,
-  migrationsRun: false,
+  migrationsRun: true,
   logging: false,
 };
 
@@ -87,9 +88,6 @@ export class DatabaseService {
 
       await AppDataSource.initialize();
 
-      await this.runMigrations();
-      console.log('Migrations completed');
-
       this.isInitialized = true;
     } catch (error) {
       console.error('Database initialization failed:', error);
@@ -105,7 +103,6 @@ export class DatabaseService {
           const connection = sqliteParams.connection;
           await connection.closeConnection(dbName, false);
           await AppDataSource.initialize();
-          await this.runMigrations();
           this.isInitialized = true;
           console.log('TypeORM setup complete after retry');
           return;
@@ -118,16 +115,6 @@ export class DatabaseService {
     }
   }
 
-  private static async runMigrations(): Promise<void> {
-    const queryRunner = AppDataSource.createQueryRunner();
-
-    try {
-      const migration = new CreateUsersTable1768754422569();
-      await migration.up(queryRunner);
-    } finally {
-      await queryRunner.release();
-    }
-  }
 
   public static getDataSource(): DataSource {
     if (!AppDataSource.isInitialized) {
