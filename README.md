@@ -7,7 +7,7 @@ A React Native/Capacitor inventory management application.
 - **Frontend**: Next.js 14, React, TypeScript
 - **Mobile**: Capacitor (Android)
 - **Database**: SQLite with TypeORM
-- **Background Tasks**: Android WorkManager + MinuteTriggerService
+- **Background Tasks**: MinuteTriggerService (foreground service)
 
 ## Development
 
@@ -30,4 +30,4 @@ Uses SQLite with TypeORM for local data persistence. Database initializes automa
 
 ## Background Tasks
 
-Multi-interval cron system with 1, 5, 15, 30, 60 minute intervals. Tasks execute via JavaScript when app is active, or are stored and executed when app becomes active again.
+Multi-interval cron system with 1, 5, 15, 30, 60 minute intervals. Tasks execute via JavaScript when app is active using MinuteTriggerService foreground service.

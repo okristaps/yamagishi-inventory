@@ -50,11 +50,9 @@ export class TriggerBasedCronService {
       // Start MinuteTriggerService for all interval triggers
       await this.startMinuteTriggerService();
 
-      // Schedule WorkManager for background execution
-      await this.scheduleWorkManagerTasks();
 
       this.isInitialized = true;
-      console.log('TriggerBasedCronService initialized (hybrid mode)');
+      console.log('TriggerBasedCronService initialized (foreground mode)');
     } catch (error) {
       console.error('Failed to initialize TriggerBasedCronService:', error);
       throw error;
@@ -115,31 +113,6 @@ export class TriggerBasedCronService {
     }
   }
 
-  private async scheduleWorkManagerTasks(): Promise<void> {
-    try {
-      // Try multiple ways to access the WorkManager plugin
-      const { Capacitor } = await import('@capacitor/core');
-
-      if (Capacitor.isNativePlatform()) {
-        // Access via Capacitor.Plugins first
-        if ((Capacitor as any).Plugins?.WorkManagerPlugin) {
-          await (Capacitor as any).Plugins.WorkManagerPlugin.schedulePeriodicTasks();
-          return;
-        }
-
-        if (typeof window !== 'undefined' && (window as any).WorkManagerPlugin) {
-          await (window as any).WorkManagerPlugin.schedulePeriodicTasks();
-          return;
-        }
-
-        console.warn('WorkManagerPlugin not found on native platform');
-      } else {
-        console.warn('WorkManager not available on web platform');
-      }
-    } catch (error) {
-      console.error('Failed to schedule WorkManager tasks:', error);
-    }
-  }
 
   private registerDefaultTasks(): void {
     this.addTask({
@@ -336,19 +309,6 @@ export class TriggerBasedCronService {
       const { Capacitor } = await import('@capacitor/core');
 
       if (Capacitor.isNativePlatform()) {
-        try {
-          if ((Capacitor as any).Plugins?.WorkManagerPlugin) {
-            await (Capacitor as any).Plugins.WorkManagerPlugin.cancelAllTasks();
-          }
-          else if (
-            typeof window !== 'undefined' &&
-            (window as any).WorkManagerPlugin
-          ) {
-            await (window as any).WorkManagerPlugin.cancelAllTasks();
-          }
-        } catch (error) {
-          console.warn('Failed to cancel WorkManager tasks:', error);
-        }
       }
 
     } catch (error) {

@@ -14,7 +14,6 @@ public class MainActivity extends BridgeActivity {
         
         // Register the custom plugins
         registerPlugin(MinuteTriggerPlugin.class);
-        registerPlugin(WorkManagerPlugin.class);
         
         // Start the trigger service immediately
         Intent serviceIntent = new Intent(this, MinuteTriggerService.class);
