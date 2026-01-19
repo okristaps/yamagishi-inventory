@@ -1,14 +1,14 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateBackgroundSyncTable1768761130612 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  name = 'CreateBackgroundSyncTable1768761130612'
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             CREATE TABLE IF NOT EXISTS background_sync (
                 id             INTEGER PRIMARY KEY AUTOINCREMENT,
                 task_name      TEXT NOT NULL,
                 execution_time DATETIME NOT NULL,
-                trigger_source TEXT NOT NULL DEFAULT 'javascript',
+                trigger_source TEXT NOT NULL DEFAULT 'unknown',
                 app_state      TEXT NOT NULL DEFAULT 'active',
                 user_count     INTEGER DEFAULT 0,
                 memory_usage   TEXT DEFAULT NULL,
@@ -16,20 +16,19 @@ export class CreateBackgroundSyncTable1768761130612 implements MigrationInterfac
                 created_at     DATETIME DEFAULT CURRENT_TIMESTAMP
             );
         `);
-        
-        await queryRunner.query(`
+
+    await queryRunner.query(`
             CREATE INDEX IF NOT EXISTS idx_background_sync_execution_time 
             ON background_sync(execution_time);
         `);
-        
-        await queryRunner.query(`
+
+    await queryRunner.query(`
             CREATE INDEX IF NOT EXISTS idx_background_sync_task_name 
             ON background_sync(task_name);
         `);
-    }
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`DROP TABLE IF EXISTS background_sync;`);
-    }
-
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DROP TABLE IF EXISTS background_sync;`);
+  }
 }
