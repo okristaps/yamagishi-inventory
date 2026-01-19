@@ -54,16 +54,7 @@ export class TriggerBasedCronService {
       await this.scheduleWorkManagerTasks();
 
       this.isInitialized = true;
-      console.log('✅ TriggerBasedCronService initialized (hybrid mode)');
-      console.log(
-        '⏰ MinuteService: 1, 5, 15, 30, 60 minute intervals when app is ACTIVE',
-      );
-      console.log(
-        '📱 WorkManager: 15, 30, 60 minute intervals when app is BACKGROUNDED',
-      );
-      console.log(
-        '⚠️ Note: 1, 5 minute tasks only run when app is active (Android limitation)',
-      );
+      console.log('TriggerBasedCronService initialized (hybrid mode)');
     } catch (error) {
       console.error('Failed to initialize TriggerBasedCronService:', error);
       throw error;
@@ -91,10 +82,9 @@ export class TriggerBasedCronService {
         }
       });
 
-      console.log('✅ Native event listeners registered for cronTrigger');
     } else {
       console.warn(
-        '⚠️ Window not available, cannot register native event listeners',
+        'Window not available, cannot register native event listeners',
       );
     }
   }
@@ -107,34 +97,21 @@ export class TriggerBasedCronService {
       if (Capacitor.isNativePlatform()) {
         // Access via Capacitor.Plugins first
         if ((Capacitor as any).Plugins?.MinuteTriggerPlugin) {
-          const result = await (
-            Capacitor as any
-          ).Plugins.MinuteTriggerPlugin.startTriggerService();
-          console.log(
-            '✅ MinuteTriggerService started via Capacitor.Plugins:',
-            result.message,
-          );
+          await (Capacitor as any).Plugins.MinuteTriggerPlugin.startTriggerService();
           return;
         }
 
-        // Fallback to window access
         if (typeof window !== 'undefined' && (window as any).MinuteTrigger) {
-          const result = await (
-            window as any
-          ).MinuteTrigger.startTriggerService();
-          console.log(
-            '✅ MinuteTriggerService started via window:',
-            result.message,
-          );
+          await (window as any).MinuteTrigger.startTriggerService();
           return;
         }
 
-        console.warn('⚠️ MinuteTriggerPlugin not found on native platform');
+        console.warn('MinuteTriggerPlugin not found on native platform');
       } else {
-        console.warn('⚠️ MinuteTrigger not available on web platform');
+        console.warn('MinuteTrigger not available on web platform');
       }
     } catch (error) {
-      console.error('❌ Failed to start MinuteTriggerService:', error);
+      console.error('Failed to start MinuteTriggerService:', error);
     }
   }
 
@@ -146,34 +123,21 @@ export class TriggerBasedCronService {
       if (Capacitor.isNativePlatform()) {
         // Access via Capacitor.Plugins first
         if ((Capacitor as any).Plugins?.WorkManagerPlugin) {
-          const result = await (
-            Capacitor as any
-          ).Plugins.WorkManagerPlugin.schedulePeriodicTasks();
-          console.log(
-            '✅ WorkManager scheduled via Capacitor.Plugins:',
-            result.message,
-          );
+          await (Capacitor as any).Plugins.WorkManagerPlugin.schedulePeriodicTasks();
           return;
         }
 
-        // Fallback to window access
-        if (
-          typeof window !== 'undefined' &&
-          (window as any).WorkManagerPlugin
-        ) {
-          const result = await (
-            window as any
-          ).WorkManagerPlugin.schedulePeriodicTasks();
-          console.log('✅ WorkManager scheduled via window:', result.message);
+        if (typeof window !== 'undefined' && (window as any).WorkManagerPlugin) {
+          await (window as any).WorkManagerPlugin.schedulePeriodicTasks();
           return;
         }
 
-        console.warn('⚠️ WorkManagerPlugin not found on native platform');
+        console.warn('WorkManagerPlugin not found on native platform');
       } else {
-        console.warn('⚠️ WorkManager not available on web platform');
+        console.warn('WorkManager not available on web platform');
       }
     } catch (error) {
-      console.error('❌ Failed to schedule WorkManager tasks:', error);
+      console.error('Failed to schedule WorkManager tasks:', error);
     }
   }
 
@@ -183,13 +147,7 @@ export class TriggerBasedCronService {
       name: '1 Minute Task',
       intervalMinutes: 1,
       callback: async () => {
-        console.log('💓 1-MINUTE: App status check', new Date().toISOString());
-        await BackgroundSyncRepository.logTaskExecution(
-          '1 Minute Task',
-          'java',
-          'active',
-          { notes: 'App heartbeat and sync status check' },
-        );
+        console.log('1-MINUTE: App status check', new Date().toISOString());
       },
     });
 
@@ -199,14 +157,8 @@ export class TriggerBasedCronService {
       intervalMinutes: 5,
       callback: async () => {
         console.log(
-          '💾 5-MINUTE: Local user data backup',
+          '5-MINUTE: Local user data backup',
           new Date().toISOString(),
-        );
-        await BackgroundSyncRepository.logTaskExecution(
-          '5 Minute Task',
-          'java',
-          'active',
-          { notes: 'User data backup and cache cleanup completed' },
         );
       },
     });
@@ -217,14 +169,8 @@ export class TriggerBasedCronService {
       intervalMinutes: 15,
       callback: async () => {
         console.log(
-          '📦 15-MINUTE: Inventory sync and validation',
+          '15-MINUTE: Inventory sync and validation',
           new Date().toISOString(),
-        );
-        await BackgroundSyncRepository.logTaskExecution(
-          '15 Minute Task',
-          'java',
-          'active',
-          { notes: 'Inventory data synchronized and validated' },
         );
       },
     });
@@ -236,14 +182,8 @@ export class TriggerBasedCronService {
       intervalMinutes: 30,
       callback: async () => {
         console.log(
-          '🔍 30-MINUTE: System health and usage metrics',
+          '30-MINUTE: System health and usage metrics',
           new Date().toISOString(),
-        );
-        await BackgroundSyncRepository.logTaskExecution(
-          '30 Minute Task',
-          'java',
-          'active',
-          { notes: 'System health monitored and analytics collected' },
         );
       },
     });
@@ -254,84 +194,68 @@ export class TriggerBasedCronService {
       intervalMinutes: 60,
       callback: async () => {
         console.log(
-          '🗄️ 60-MINUTE: Database maintenance and cleanup',
+          '60-MINUTE: Database maintenance and cleanup',
           new Date().toISOString(),
-        );
-        await BackgroundSyncRepository.logTaskExecution(
-          '60 Minute Task',
-          'java',
-          'active',
-          { notes: 'Database optimized and maintenance tasks completed' },
         );
       },
     });
 
-    console.log(
-      '✅ Production cron tasks registered:',
-      Array.from(this.tasks.keys()),
-    );
   }
 
   private async handleCronTrigger(event: TriggerEvent): Promise<void> {
     const now = Date.now();
+    
+    const isPendingTask = (event as any).source === 'workmanager' && (event as any).stored_at;
+    const logTimestamp = isPendingTask ? new Date(event.current_time).toISOString() : new Date().toISOString();
 
-    console.log(
-      `📅 Cron trigger received: ${event.interval} (${event.timestamp}, total: ${event.total_minutes}min)`,
-    );
 
-    const lastTimeForInterval =
-      this.lastTriggerTimeByInterval.get(event.interval) || 0;
-    if (now - lastTimeForInterval < 30000) {
-      console.log(
-        `⏩ Skipping ${event.interval} trigger - too soon after last one`,
-      );
-      return;
+    if (!isPendingTask) {
+      const lastTimeForInterval =
+        this.lastTriggerTimeByInterval.get(event.interval) || 0;
+      if (now - lastTimeForInterval < 30000) {
+        return;
+      }
+      this.lastTriggerTimeByInterval.set(event.interval, now);
     }
-
-    this.lastTriggerTimeByInterval.set(event.interval, now);
 
     const intervalMinutes = this.parseInterval(event.interval);
     if (intervalMinutes === null) {
-      console.warn(`⚠️ Unknown interval: ${event.interval}`);
+      console.warn(`Unknown interval: ${event.interval}`);
       return;
     }
 
-    for (const [taskId, task] of Array.from(this.tasks.entries())) {
+    for (const [, task] of Array.from(this.tasks.entries())) {
       if (task.intervalMinutes === intervalMinutes) {
-        const shouldRun = this.shouldTaskRun(task, now);
+        const shouldRun = isPendingTask || this.shouldTaskRun(task, now);
 
         if (shouldRun) {
-          console.log(
-            `🚀 Running ${event.interval} task: ${task.name} (${taskId})`,
-          );
           try {
-            // Execute the task
             await task.callback();
-            task.lastRun = now;
+            
+            if (!isPendingTask) {
+              task.lastRun = now;
+            }
 
-            // Log execution to database
             await BackgroundSyncRepository.logTaskExecution(
               task.name,
-              'java', // Native Java service triggering
-              'active', // App is active since JS is running
+              'java',
+              isPendingTask ? 'background' : 'active',
               {
-                notes: `${event.interval} task executed successfully at ${new Date().toISOString()}`,
+                notes: `${event.interval} task executed ${isPendingTask ? 'in background' : 'successfully'} at ${logTimestamp}`,
               },
             );
 
-            console.log(`✅ ${event.interval} task completed: ${task.name}`);
           } catch (error) {
             console.error(
-              `❌ ${event.interval} task failed: ${task.name}`,
+              `${event.interval} task failed: ${task.name}`,
               error,
             );
 
-            // Log failure to database
             try {
               await BackgroundSyncRepository.logTaskExecution(
                 task.name,
                 'java',
-                'active',
+                isPendingTask ? 'background' : 'active',
                 {
                   notes: `${event.interval} task failed: ${error instanceof Error ? error.message : String(error)}`,
                 },
@@ -364,32 +288,22 @@ export class TriggerBasedCronService {
 
   private shouldTaskRun(task: CronTask, currentTime: number): boolean {
     if (!task.lastRun) {
-      // First run - execute immediately
       return true;
     }
 
     const minutesSinceLastRun = (currentTime - task.lastRun) / (1000 * 60);
     const shouldRun = minutesSinceLastRun >= task.intervalMinutes;
 
-    if (shouldRun) {
-      console.log(
-        `⏰ Task ${task.name} due: ${minutesSinceLastRun.toFixed(1)} min since last run (interval: ${task.intervalMinutes} min)`,
-      );
-    }
 
     return shouldRun;
   }
 
   addTask(task: CronTask): void {
     this.tasks.set(task.id, task);
-    console.log(
-      `➕ Added task: ${task.name} (every ${task.intervalMinutes} minutes)`,
-    );
   }
 
   removeTask(taskId: string): void {
     this.tasks.delete(taskId);
-    console.log(`➖ Removed task: ${taskId}`);
   }
 
   async getTaskStatus(): Promise<
@@ -419,30 +333,24 @@ export class TriggerBasedCronService {
       this.tasks.clear();
       this.isInitialized = false;
 
-      // Cancel WorkManager tasks
       const { Capacitor } = await import('@capacitor/core');
 
       if (Capacitor.isNativePlatform()) {
         try {
-          // Try Capacitor.Plugins first
           if ((Capacitor as any).Plugins?.WorkManagerPlugin) {
             await (Capacitor as any).Plugins.WorkManagerPlugin.cancelAllTasks();
-            console.log('✅ WorkManager tasks cancelled via Capacitor.Plugins');
           }
-          // Fallback to window access
           else if (
             typeof window !== 'undefined' &&
             (window as any).WorkManagerPlugin
           ) {
             await (window as any).WorkManagerPlugin.cancelAllTasks();
-            console.log('✅ WorkManager tasks cancelled via window');
           }
         } catch (error) {
-          console.warn('⚠️ Failed to cancel WorkManager tasks:', error);
+          console.warn('Failed to cancel WorkManager tasks:', error);
         }
       }
 
-      console.log('🛑 TriggerBasedCronService destroyed');
     } catch (error) {
       console.error('Failed to destroy TriggerBasedCronService:', error);
     }
