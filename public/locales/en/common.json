@@ -1,0 +1,45 @@
+{
+  "app": {
+    "title": "Yamagishi Inventory",
+    "users": "Users",
+    "addUser": "Add User",
+    "webMode": "Web Mode",
+    "triggerCronActive": "Trigger Cron Active",
+    "triggerCronInactive": "Trigger Cron Inactive"
+  },
+  "user": {
+    "name": "User name:",
+    "email": "Email (optional):",
+    "telephone": "Telephone (optional):",
+    "id": "ID:",
+    "loginPin": "Login PIN:",
+    "noUsers": "No Users Found",
+    "databaseInitialized": "Database initialized successfully but no users found",
+    "failedToAdd": "Failed to add user",
+    "loadingUsers": "Initializing database and loading users...",
+    "errorLoading": "Error Loading Users",
+    "retry": "Retry",
+    "refresh": "Refresh"
+  },
+  "sync": {
+    "statistics": "Sync Statistics",
+    "taskSummary": "Task Summary",
+    "recentExecutions": "Recent Executions",
+    "totalRecords": "Total Records:",
+    "uniqueTasks": "Unique Tasks:",
+    "executions": "Executions:",
+    "lastRun": "Last run:",
+    "noSyncRecords": "No sync records yet",
+    "backgroundTasksAppear": "Background tasks will appear here when executed",
+    "taskCompleted": "Background Task Completed",
+    "completedSuccessfully": "completed successfully",
+    "users": "Users:"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "ok": "OK"
+  }
+}

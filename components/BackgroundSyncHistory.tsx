@@ -17,8 +17,10 @@ import {
 import { refresh, time, checkmark, alert } from 'ionicons/icons';
 import { BackgroundSyncRepository } from '@/repositories/BackgroundSyncRepository';
 import { BackgroundSync } from '@/database/entities';
+import { useTranslation } from 'react-i18next';
 
 const BackgroundSyncHistory: React.FC = () => {
+  const { t } = useTranslation();
   const [syncHistory, setSyncHistory] = useState<BackgroundSync[]>([]);
   const [syncStats, setSyncStats] = useState<any[]>([]);
 
@@ -79,7 +81,7 @@ const BackgroundSyncHistory: React.FC = () => {
         <IonCardHeader>
           <IonCardTitle>
             <div className="flex items-center justify-between">
-              <span>📊 Sync Statistics</span>
+              <span>📊 {t('sync.statistics')}</span>
               <IonButton fill="clear" onClick={loadSyncData}>
                 <IonIcon icon={refresh} />
               </IonButton>
@@ -89,10 +91,10 @@ const BackgroundSyncHistory: React.FC = () => {
         <IonCardContent>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <strong>Total Records:</strong> {syncHistory.length}
+              <strong>{t('sync.totalRecords')}</strong> {syncHistory.length}
             </div>
             <div>
-              <strong>Unique Tasks:</strong> {syncStats.length}
+              <strong>{t('sync.uniqueTasks')}</strong> {syncStats.length}
             </div>
           </div>
         </IonCardContent>
@@ -102,7 +104,7 @@ const BackgroundSyncHistory: React.FC = () => {
       {syncStats.length > 0 && (
         <IonCard>
           <IonCardHeader>
-            <IonCardTitle>🎯 Task Summary</IonCardTitle>
+            <IonCardTitle>🎯 {t('sync.taskSummary')}</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
             <IonList>
@@ -110,8 +112,8 @@ const BackgroundSyncHistory: React.FC = () => {
                 <IonItem key={index}>
                   <IonLabel>
                     <h3>{stat.task_name}</h3>
-                    <p>Executions: {stat.execution_count}</p>
-                    <p>Last run: {formatTimestamp(new Date(stat.last_execution))}</p>
+                    <p>{t('sync.executions')} {stat.execution_count}</p>
+                    <p>{t('sync.lastRun')} {formatTimestamp(new Date(stat.last_execution))}</p>
                   </IonLabel>
                   <div slot="end" className="flex gap-2">
                     <IonBadge color={getTaskTypeColor(stat.trigger_source)}>
@@ -131,14 +133,14 @@ const BackgroundSyncHistory: React.FC = () => {
       {/* Recent Executions */}
       <IonCard>
         <IonCardHeader>
-          <IonCardTitle>📜 Recent Executions</IonCardTitle>
+          <IonCardTitle>📜 {t('sync.recentExecutions')}</IonCardTitle>
         </IonCardHeader>
         <IonCardContent>
           {syncHistory.length === 0 ? (
             <div className="text-center py-8">
               <IonIcon icon={time} size="large" color="medium" />
-              <h3 className="mt-4 mb-2">No sync records yet</h3>
-              <p className="text-gray-500">Background tasks will appear here when executed</p>
+              <h3 className="mt-4 mb-2">{t('sync.noSyncRecords')}</h3>
+              <p className="text-gray-500">{t('sync.backgroundTasksAppear')}</p>
             </div>
           ) : (
             <IonList>
@@ -156,7 +158,7 @@ const BackgroundSyncHistory: React.FC = () => {
                       <p className="text-sm text-gray-600">{sync.notes}</p>
                     )}
                     {sync.userCount > 0 && (
-                      <p className="text-xs">Users: {sync.userCount}</p>
+                      <p className="text-xs">{t('sync.users')} {sync.userCount}</p>
                     )}
                   </IonLabel>
                   <div slot="end" className="flex flex-col gap-1">

@@ -1,5 +1,6 @@
 'use client';
 import Script from 'next/script';
+import '@/lib/i18n';
 
 import 'tailwindcss/tailwind.css';
 /* Core CSS required for Ionic components to work properly */

@@ -23,8 +23,10 @@ import { UserRepository } from '@/repositories/UserRepository';
 import { triggerCron } from '@/src/services/TriggerBasedCronService';
 import { Capacitor } from '@capacitor/core';
 import BackgroundSyncHistory from '@/components/BackgroundSyncHistory';
+import { useTranslation } from 'react-i18next';
 
 const MainPage: React.FC = () => {
+  const { t } = useTranslation();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,11 +44,11 @@ const MainPage: React.FC = () => {
       setUsers(allUsers);
     } catch (err) {
       console.error('Failed to load users:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load users');
+      setError(err instanceof Error ? err.message : t('user.errorLoading'));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   const initializeTriggerCron = useCallback(async () => {
     try {
@@ -73,11 +75,11 @@ const MainPage: React.FC = () => {
 
   const handleAddUser = async () => {
     try {
-      const name = prompt('User name:');
+      const name = prompt(t('user.name'));
       if (!name) return;
 
-      const email = prompt('Email (optional):');
-      const telephone = prompt('Telephone (optional):');
+      const email = prompt(t('user.email'));
+      const telephone = prompt(t('user.telephone'));
 
       await UserRepository.save({
         name,
@@ -88,7 +90,7 @@ const MainPage: React.FC = () => {
       await loadUsers();
     } catch (error) {
       console.error('Failed to add user:', error);
-      alert('Failed to add user');
+      alert(t('user.failedToAdd'));
     }
   };
 
@@ -97,14 +99,14 @@ const MainPage: React.FC = () => {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle className='bg-green'>Users</IonTitle>
+            <IonTitle className='bg-green'>{t('app.users')}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
           <div className="flex justify-center items-center h-full">
             <div className="text-center">
               <IonSpinner name="crescent" />
-              <p className="mt-4">Initializing database and loading users...</p>
+              <p className="mt-4">{t('user.loadingUsers')}</p>
             </div>
           </div>
         </IonContent>
@@ -117,13 +119,13 @@ const MainPage: React.FC = () => {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Users</IonTitle>
+            <IonTitle>{t('app.users')}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
           <IonCard color="danger">
             <IonCardContent>
-              <h3>Error Loading Users</h3>
+              <h3>{t('user.errorLoading')}</h3>
               <p>{error}</p>
               <IonButton
                 expand="block"
@@ -132,7 +134,7 @@ const MainPage: React.FC = () => {
                 onClick={loadUsers}
               >
                 <IonIcon icon={refresh} slot="start" />
-                Retry
+                {t('user.retry')}
               </IonButton>
             </IonCardContent>
           </IonCard>
@@ -149,14 +151,14 @@ const MainPage: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <IonIcon icon={cube} className="mr-2" />
-                Users ({users.length})
+{t('app.users')} ({users.length})
               </div>
               <div className="flex items-center text-sm">
                 <div className={`w-2 h-2 rounded-full mr-2 ${triggerCronEnabled ? 'bg-green-500' : 'bg-gray-400'
                   }`}></div>
                 {Capacitor.isNativePlatform() ?
-                  (triggerCronEnabled ? 'Trigger Cron Active' : 'Trigger Cron Inactive') :
-                  'Web Mode'
+                  (triggerCronEnabled ? t('app.triggerCronActive') : t('app.triggerCronInactive')) :
+                  t('app.webMode')
                 }
               </div>
             </div>
@@ -176,22 +178,22 @@ const MainPage: React.FC = () => {
             onClick={handleAddUser}
           >
             <IonIcon icon={add} slot="start" />
-            Add User
+{t('app.addUser')}
           </IonButton>
 
           {users.length === 0 ? (
             <IonCard>
               <IonCardContent className="text-center py-8">
                 <IonIcon icon={cube} size="large" color="medium" />
-                <h3 className="mt-4 mb-2">No Users Found</h3>
-                <p className="text-gray-500">Database initialized successfully but no users found</p>
+                <h3 className="mt-4 mb-2">{t('user.noUsers')}</h3>
+                <p className="text-gray-500">{t('user.databaseInitialized')}</p>
                 <IonButton
                   fill="outline"
                   className="mt-4"
                   onClick={loadUsers}
                 >
                   <IonIcon icon={refresh} slot="start" />
-                  Refresh
+                  {t('user.refresh')}
                 </IonButton>
               </IonCardContent>
             </IonCard>
@@ -205,7 +207,7 @@ const MainPage: React.FC = () => {
                   <IonCardContent>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <strong>ID:</strong> {user.id}
+                        <strong>{t('user.id')}</strong> {user.id}
                       </div>
                       <div>
                         <strong>Email:</strong> {user.email || 'N/A'}
@@ -214,7 +216,7 @@ const MainPage: React.FC = () => {
                         <strong>Telephone:</strong> {user.telephone || 'N/A'}
                       </div>
                       <div>
-                        <strong>Login PIN:</strong> {user.appsLoginPin ? '****' : 'N/A'}
+                        <strong>{t('user.loginPin')}</strong> {user.appsLoginPin ? '****' : 'N/A'}
                       </div>
                     </div>
                   </IonCardContent>
