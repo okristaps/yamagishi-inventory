@@ -1,12 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { IonApp, setupIonicReact } from '@ionic/react';
 import MainPage from '@/components/pages/MainPage';
 
-// Initialize Ionic
-setupIonicReact({
-  mode: 'ios', // or 'md' for Material Design
-});
 
 export default function Page() {
   const [isClient, setIsClient] = useState(false);
@@ -18,15 +13,15 @@ export default function Page() {
 
   if (!isClient) {
     return (
-      <IonApp>
+      <div className="min-h-screen bg-gray-50">
         <div>Loading...</div>
-      </IonApp>
+      </div>
     );
   }
 
   return (
-    <IonApp>
+    <div className="min-h-screen bg-gray-50">
       <MainPage />
-    </IonApp>
+    </div>
   );
 }

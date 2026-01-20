@@ -1,20 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonBadge,
-  IonButton,
-  IonIcon,
-  IonRefresher,
-  IonRefresherContent
-} from '@ionic/react';
-import { refresh, time, checkmark, alert } from 'ionicons/icons';
+import { FaSync, FaClock, FaCheck, FaExclamationTriangle } from 'react-icons/fa';
 import { BackgroundSyncRepository } from '@/repositories/BackgroundSyncRepository';
 import { BackgroundSync } from '@/database/entities';
 import { useTranslation } from 'react-i18next';
@@ -26,7 +12,6 @@ const BackgroundSyncHistory: React.FC = () => {
 
   const loadSyncData = async () => {
     try {
-
       const history = await BackgroundSyncRepository.getRecentSyncHistory(30);
       setSyncHistory(history);
 
@@ -43,142 +28,124 @@ const BackgroundSyncHistory: React.FC = () => {
     loadSyncData();
   }, []);
 
-  const handleRefresh = async (event: any) => {
-    await loadSyncData();
-    event.detail.complete();
-  };
-
   const formatTimestamp = (date: Date) => {
     return new Date(date).toLocaleString();
   };
 
   const getTaskTypeColor = (triggerSource: string) => {
     switch (triggerSource) {
-      case 'javascript': return 'primary';
-      case 'java': return 'success';
-      case 'native': return 'warning';
-      default: return 'medium';
+      case 'javascript': return 'bg-blue-100 text-blue-700';
+      case 'java': return 'bg-green-100 text-green-700';
+      case 'native': return 'bg-yellow-100 text-yellow-700';
+      default: return 'bg-gray-100 text-gray-700';
     }
   };
 
   const getAppStateColor = (appState: string) => {
     switch (appState) {
-      case 'active': return 'success';
-      case 'background': return 'warning';
-      case 'closed': return 'danger';
-      default: return 'medium';
+      case 'active': return 'bg-green-100 text-green-700';
+      case 'background': return 'bg-yellow-100 text-yellow-700';
+      case 'closed': return 'bg-red-100 text-red-700';
+      default: return 'bg-gray-100 text-gray-700';
     }
   };
 
   return (
-    <div>
-      <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
-        <IonRefresherContent />
-      </IonRefresher>
-
+    <div className="space-y-4">
       {/* Statistics Card */}
-      <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>
-            <div className="flex items-center justify-between">
-              <span>📊 {t('sync.statistics')}</span>
-              <IonButton fill="clear" onClick={loadSyncData}>
-                <IonIcon icon={refresh} />
-              </IonButton>
-            </div>
-          </IonCardTitle>
-        </IonCardHeader>
-        <IonCardContent>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <strong>{t('sync.totalRecords')}</strong> {syncHistory.length}
-            </div>
-            <div>
-              <strong>{t('sync.uniqueTasks')}</strong> {syncStats.length}
-            </div>
+      <div className="bg-white rounded-lg shadow p-4">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+            📊 {t('sync.statistics')}
+          </h2>
+          <button
+            onClick={loadSyncData}
+            className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            <FaSync className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="font-medium text-gray-700">{t('sync.totalRecords')}</span>{' '}
+            <span className="text-gray-600">{syncHistory.length}</span>
           </div>
-        </IonCardContent>
-      </IonCard>
+          <div>
+            <span className="font-medium text-gray-700">{t('sync.uniqueTasks')}</span>{' '}
+            <span className="text-gray-600">{syncStats.length}</span>
+          </div>
+        </div>
+      </div>
 
       {/* Task Statistics */}
       {syncStats.length > 0 && (
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>🎯 {t('sync.taskSummary')}</IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <IonList>
-              {syncStats.map((stat, index) => (
-                <IonItem key={index}>
-                  <IonLabel>
-                    <h3>{stat.task_name}</h3>
-                    <p>{t('sync.executions')} {stat.execution_count}</p>
-                    <p>{t('sync.lastRun')} {formatTimestamp(new Date(stat.last_execution))}</p>
-                  </IonLabel>
-                  <div slot="end" className="flex gap-2">
-                    <IonBadge color={getTaskTypeColor(stat.trigger_source)}>
-                      {stat.trigger_source}
-                    </IonBadge>
-                    <IonBadge color={getAppStateColor(stat.app_state)}>
-                      {stat.app_state}
-                    </IonBadge>
-                  </div>
-                </IonItem>
-              ))}
-            </IonList>
-          </IonCardContent>
-        </IonCard>
+        <div className="bg-white rounded-lg shadow p-4">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">🎯 {t('sync.taskSummary')}</h2>
+          <div className="space-y-3">
+            {syncStats.map((stat, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div>
+                  <h3 className="font-medium text-gray-900">{stat.task_name}</h3>
+                  <p className="text-sm text-gray-600">{t('sync.executions')} {stat.execution_count}</p>
+                  <p className="text-sm text-gray-600">{t('sync.lastRun')} {formatTimestamp(new Date(stat.last_execution))}</p>
+                </div>
+                <div className="flex gap-2">
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${getTaskTypeColor(stat.trigger_source)}`}>
+                    {stat.trigger_source}
+                  </span>
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${getAppStateColor(stat.app_state)}`}>
+                    {stat.app_state}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
 
       {/* Recent Executions */}
-      <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>📜 {t('sync.recentExecutions')}</IonCardTitle>
-        </IonCardHeader>
-        <IonCardContent>
-          {syncHistory.length === 0 ? (
-            <div className="text-center py-8">
-              <IonIcon icon={time} size="large" color="medium" />
-              <h3 className="mt-4 mb-2">{t('sync.noSyncRecords')}</h3>
-              <p className="text-gray-500">{t('sync.backgroundTasksAppear')}</p>
-            </div>
-          ) : (
-            <IonList>
-              {syncHistory.map((sync) => (
-                <IonItem key={sync.id}>
-                  <IonIcon
-                    icon={sync.notes?.includes('failed') ? alert : checkmark}
-                    color={sync.notes?.includes('failed') ? 'danger' : 'success'}
-                    slot="start"
-                  />
-                  <IonLabel>
-                    <h3>{sync.taskName}</h3>
-                    <p>{formatTimestamp(sync.executionTime)}</p>
-                    {sync.notes && (
-                      <p className="text-sm text-gray-600">{sync.notes}</p>
-                    )}
-                    {sync.userCount > 0 && (
-                      <p className="text-xs">{t('sync.users')} {sync.userCount}</p>
-                    )}
-                  </IonLabel>
-                  <div slot="end" className="flex flex-col gap-1">
-                    <IonBadge
-                      color={getTaskTypeColor(sync.triggerSource)}
-                    >
-                      {sync.triggerSource}
-                    </IonBadge>
-                    <IonBadge
-                      color={getAppStateColor(sync.appState)}
-                    >
-                      {sync.appState}
-                    </IonBadge>
-                  </div>
-                </IonItem>
-              ))}
-            </IonList>
-          )}
-        </IonCardContent>
-      </IonCard>
+      <div className="bg-white rounded-lg shadow p-4">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">📜 {t('sync.recentExecutions')}</h2>
+        {syncHistory.length === 0 ? (
+          <div className="text-center py-8">
+            <FaClock className="w-8 h-8 text-gray-400 mx-auto" />
+            <h3 className="mt-4 mb-2 text-lg font-semibold text-gray-900">{t('sync.noSyncRecords')}</h3>
+            <p className="text-gray-500">{t('sync.backgroundTasksAppear')}</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {syncHistory.map((sync) => (
+              <div key={sync.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                <div className="mt-1">
+                  {sync.notes?.includes('failed') ? (
+                    <FaExclamationTriangle className="w-4 h-4 text-red-500" />
+                  ) : (
+                    <FaCheck className="w-4 h-4 text-green-500" />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium text-gray-900">{sync.taskName}</h3>
+                  <p className="text-sm text-gray-600">{formatTimestamp(sync.executionTime)}</p>
+                  {sync.notes && (
+                    <p className="text-sm text-gray-600 mt-1">{sync.notes}</p>
+                  )}
+                  {sync.userCount > 0 && (
+                    <p className="text-xs text-gray-500 mt-1">{t('sync.users')} {sync.userCount}</p>
+                  )}
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${getTaskTypeColor(sync.triggerSource)}`}>
+                    {sync.triggerSource}
+                  </span>
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${getAppStateColor(sync.appState)}`}>
+                    {sync.appState}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

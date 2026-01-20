@@ -1,23 +1,6 @@
 'use client';
 import React, { useEffect, useState, useCallback } from 'react';
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonList,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonSpinner,
-  IonButton,
-  IonIcon,
-  IonRefresher,
-  IonRefresherContent,
-} from '@ionic/react';
-import { add, cube, refresh } from 'ionicons/icons';
+import { FaPlus, FaCube, FaSync } from 'react-icons/fa';
 import { User } from '@/database/entities';
 import { UserRepository } from '@/repositories/UserRepository';
 import { triggerCron } from '@/src/services/TriggerBasedCronService';
@@ -68,10 +51,6 @@ const MainPage: React.FC = () => {
     loadUsers();
   }, [initializeTriggerCron, loadUsers]);
 
-  const handleRefresh = async (event: any) => {
-    await loadUsers();
-    event.detail.complete();
-  };
 
   const handleAddUser = async () => {
     try {
@@ -96,141 +75,130 @@ const MainPage: React.FC = () => {
 
   if (loading) {
     return (
-      <IonPage>
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle className='bg-green'>{t('app.users')}</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent className="ion-padding">
-          <div className="flex justify-center items-center h-full">
+      <div className="min-h-screen bg-gray-50">
+        <header className="bg-white shadow">
+          <div className="px-4 py-4">
+            <h1 className="text-xl font-semibold text-gray-900">{t('app.users')}</h1>
+          </div>
+        </header>
+        <main className="p-4">
+          <div className="flex justify-center items-center min-h-64">
             <div className="text-center">
-              <IonSpinner name="crescent" />
-              <p className="mt-4">{t('user.loadingUsers')}</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600">{t('user.loadingUsers')}</p>
             </div>
           </div>
-        </IonContent>
-      </IonPage>
+        </main>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <IonPage>
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>{t('app.users')}</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent className="ion-padding">
-          <IonCard color="danger">
-            <IonCardContent>
-              <h3>{t('user.errorLoading')}</h3>
-              <p>{error}</p>
-              <IonButton
-                expand="block"
-                fill="outline"
-                className="mt-4"
-                onClick={loadUsers}
-              >
-                <IonIcon icon={refresh} slot="start" />
-                {t('user.retry')}
-              </IonButton>
-            </IonCardContent>
-          </IonCard>
-        </IonContent>
-      </IonPage>
+      <div className="min-h-screen bg-gray-50">
+        <header className="bg-white shadow">
+          <div className="px-4 py-4">
+            <h1 className="text-xl font-semibold text-gray-900">{t('app.users')}</h1>
+          </div>
+        </header>
+        <main className="p-4">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-red-800">{t('user.errorLoading')}</h3>
+            <p className="text-red-600 mt-2">{error}</p>
+            <button
+              onClick={loadUsers}
+              className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors flex items-center gap-2"
+            >
+              <FaSync className="w-4 h-4" />
+              {t('user.retry')}
+            </button>
+          </div>
+        </main>
+      </div>
     );
   }
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <IonIcon icon={cube} className="mr-2" />
-{t('app.users')} ({users.length})
-              </div>
-              <div className="flex items-center text-sm">
-                <div className={`w-2 h-2 rounded-full mr-2 ${triggerCronEnabled ? 'bg-green-500' : 'bg-gray-400'
-                  }`}></div>
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white shadow sticky top-0 z-10">
+        <div className="px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <FaCube className="w-5 h-5 text-blue-600 mr-2" />
+              <h1 className="text-xl font-semibold text-gray-900">
+                {t('app.users')} ({users.length})
+              </h1>
+            </div>
+            <div className="flex items-center text-sm">
+              <div className={`w-2 h-2 rounded-full mr-2 ${
+                triggerCronEnabled ? 'bg-green-500' : 'bg-gray-400'
+              }`}></div>
+              <span className="text-gray-600">
                 {Capacitor.isNativePlatform() ?
                   (triggerCronEnabled ? t('app.triggerCronActive') : t('app.triggerCronInactive')) :
                   t('app.webMode')
                 }
-              </div>
+              </span>
             </div>
-          </IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
-          <IonRefresherContent />
-        </IonRefresher>
-
-        <div className="p-4">
-          <IonButton
-            expand="block"
-            className="mb-4"
-            color="primary"
-            onClick={handleAddUser}
-          >
-            <IonIcon icon={add} slot="start" />
-{t('app.addUser')}
-          </IonButton>
-
-          {users.length === 0 ? (
-            <IonCard>
-              <IonCardContent className="text-center py-8">
-                <IonIcon icon={cube} size="large" color="medium" />
-                <h3 className="mt-4 mb-2">{t('user.noUsers')}</h3>
-                <p className="text-gray-500">{t('user.databaseInitialized')}</p>
-                <IonButton
-                  fill="outline"
-                  className="mt-4"
-                  onClick={loadUsers}
-                >
-                  <IonIcon icon={refresh} slot="start" />
-                  {t('user.refresh')}
-                </IonButton>
-              </IonCardContent>
-            </IonCard>
-          ) : (
-            <IonList>
-              {users.map((user) => (
-                <IonCard key={user.id} className="mb-4">
-                  <IonCardHeader>
-                    <IonCardTitle className="text-lg">{user.name}</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <strong>{t('user.id')}</strong> {user.id}
-                      </div>
-                      <div>
-                        <strong>Email:</strong> {user.email || 'N/A'}
-                      </div>
-                      <div>
-                        <strong>Telephone:</strong> {user.telephone || 'N/A'}
-                      </div>
-                      <div>
-                        <strong>{t('user.loginPin')}</strong> {user.appsLoginPin ? '****' : 'N/A'}
-                      </div>
-                    </div>
-                  </IonCardContent>
-                </IonCard>
-              ))}
-            </IonList>
-          )}
-
-          <div className="mt-6">
-            <BackgroundSyncHistory />
           </div>
         </div>
-      </IonContent>
-    </IonPage>
+      </header>
+
+      <main className="p-4">
+        <button
+          onClick={handleAddUser}
+          className="w-full mb-4 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
+        >
+          <FaPlus className="w-4 h-4" />
+          {t('app.addUser')}
+        </button>
+
+        {users.length === 0 ? (
+          <div className="bg-white rounded-lg shadow p-8 text-center">
+            <FaCube className="w-12 h-12 text-gray-400 mx-auto" />
+            <h3 className="mt-4 mb-2 text-lg font-semibold text-gray-900">{t('user.noUsers')}</h3>
+            <p className="text-gray-500 mb-4">{t('user.databaseInitialized')}</p>
+            <button
+              onClick={loadUsers}
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2 mx-auto"
+            >
+              <FaSync className="w-4 h-4" />
+              {t('user.refresh')}
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {users.map((user) => (
+              <div key={user.id} className="bg-white rounded-lg shadow p-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{user.name}</h3>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium text-gray-700">{t('user.id')}</span>{' '}
+                    <span className="text-gray-600">{user.id}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Email:</span>{' '}
+                    <span className="text-gray-600">{user.email || 'N/A'}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Telephone:</span>{' '}
+                    <span className="text-gray-600">{user.telephone || 'N/A'}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">{t('user.loginPin')}</span>{' '}
+                    <span className="text-gray-600">{user.appsLoginPin ? '****' : 'N/A'}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-6">
+          <BackgroundSyncHistory />
+        </div>
+      </main>
+    </div>
   );
 };
 
