@@ -4,9 +4,6 @@ module.exports = {
   output: 'export',
   trailingSlash: true,
   basePath: '',
-  experimental: {
-    esmExternals: 'loose',
-  },
   allowedDevOrigins: ['192.168.1.101'],
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -70,7 +67,6 @@ module.exports = {
     ],
     unoptimized: true,
   },
-  swcMinify: true,
   transpilePackages: [
     '@ionic/react',
     '@ionic/core',

@@ -5,9 +5,16 @@
   --safe-area-right: env(safe-area-inset-right, 0);
 }
 body {
-  overflow: hidden;
-  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
   width: 100vw;
+  /* Support for mobile viewport units */
+  min-height: 100svh;
+  /* Smooth scrolling for better UX */
+  scroll-behavior: smooth;
+  /* Prevent scroll bounce on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
 /**
