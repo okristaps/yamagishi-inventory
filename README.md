@@ -1,6 +1,6 @@
 # Yamagishi Inventory
 
-A React Native/Capacitor inventory management application.
+A Next JS/Capacitor inventory management application.
 
 ## Tech Stack
 
