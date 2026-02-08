@@ -4,7 +4,7 @@ module.exports = {
   output: 'export',
   trailingSlash: true,
   basePath: '',
-  allowedDevOrigins: ['192.168.1.101'],
+  allowedDevOrigins: ['192.168.1.*', '10.0.2.2'],
 
   compiler: {
     removeConsole: true,

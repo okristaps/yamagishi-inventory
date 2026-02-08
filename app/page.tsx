@@ -1,21 +1,21 @@
 'use client';
 import React, { useRef } from 'react';
 import { ThemeToggle, SimpleThemeToggle } from '@/components/ThemeToggle';
-import { 
-  Button, IconButton, ButtonGroup, Input, Textarea, Card, CardHeader, CardTitle, CardContent, CardFooter, Badge, 
+import {
+  Button, IconButton, ButtonGroup, Input, Textarea, Card, CardHeader, CardTitle, CardContent, CardFooter, Badge,
   ListGroup, ListItem, ListItemText, ListItemIcon,
   Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose, DialogActions,
   Checkbox, Switch, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator,
-  Separator, Autocomplete, Select, Tooltip, SimpleTooltip, Popover, PopoverTrigger, PopoverContent, 
+  Separator, Autocomplete, Select, Tooltip, SimpleTooltip, Popover, PopoverTrigger, PopoverContent,
   ConfirmPopover, DatePicker, Chip, AvatarChip, Alert, SuccessAlert, InfoAlert, WarningAlert, ErrorAlert,
   Progress, CircularProgress
 } from '@/components/ui';
 
 // Import some icons for demo
-import { 
-  PlusIcon, 
-  HeartIcon, 
-  Share1Icon as ShareIcon, 
+import {
+  PlusIcon,
+  HeartIcon,
+  Share1Icon as ShareIcon,
   DownloadIcon,
   TrashIcon,
   Pencil1Icon as PencilIcon,
@@ -27,7 +27,7 @@ import {
 export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = React.useState(false);
-  
+
   const handleLoadingDemo = () => {
     setLoading(true);
     setTimeout(() => setLoading(false), 3000);
@@ -38,7 +38,7 @@ export default function Page() {
   return (
     <div ref={containerRef} className="p-6">
       <div className="max-w-4xl mx-auto">
-        
+
         {/* Reusable UI Components */}
         <Card className="mb-6">
           <CardHeader>
@@ -62,11 +62,11 @@ export default function Page() {
                   <Button variant="link">Link</Button>
                 </div>
               </div>
-              
+
               {/* All Button Sizes */}
               <div>
                 <h5 className="font-medium mb-3 text-gray-900 dark:text-gray-100">All Sizes</h5>
-                <div className="flex items-center space-x-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <Button size="xs">Extra Small</Button>
                   <Button size="sm">Small</Button>
                   <Button size="md">Medium</Button>
@@ -74,7 +74,7 @@ export default function Page() {
                   <Button size="xl">Extra Large</Button>
                 </div>
               </div>
-              
+
               {/* Buttons with Icons */}
               <div>
                 <h5 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Buttons with Icons</h5>
@@ -85,18 +85,18 @@ export default function Page() {
                   <Button variant="outline" leftIcon={<DownloadIcon />} rightIcon={<ShareIcon />}>Download & Share</Button>
                 </div>
               </div>
-              
+
               {/* Icon Buttons */}
               <div>
                 <h5 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Icon Only Buttons</h5>
-                <div className="flex space-x-2">
+                <div className="flex flex-wrap gap-2">
                   <IconButton icon={<HeartIcon />} aria-label="Like" variant="ghost" />
                   <IconButton icon={<ShareIcon />} aria-label="Share" variant="outline" />
                   <IconButton icon={<PencilIcon />} aria-label="Edit" variant="primary" />
                   <IconButton icon={<TrashIcon />} aria-label="Delete" variant="destructive" />
                 </div>
               </div>
-              
+
               {/* Button States */}
               <div>
                 <h5 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Button States</h5>
@@ -109,7 +109,7 @@ export default function Page() {
                   <Button loading leftIcon={<ReloadIcon />}>Processing</Button>
                 </div>
               </div>
-              
+
               {/* Button Groups */}
               <div>
                 <h5 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Button Groups</h5>
@@ -122,7 +122,7 @@ export default function Page() {
                       <Button variant="outline" leftIcon={<TrashIcon />}>Delete</Button>
                     </ButtonGroup>
                   </div>
-                  
+
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Vertical Group:</p>
                     <ButtonGroup orientation="vertical">
@@ -133,7 +133,7 @@ export default function Page() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Full Width Buttons */}
               <div>
                 <h5 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Full Width</h5>
@@ -142,33 +142,33 @@ export default function Page() {
                   <Button fullWidth variant="outline">Cancel</Button>
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               {/* Inputs */}
               <div>
                 <h5 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Form Controls</h5>
                 <div className="space-y-4">{/* Close the extra div later */}
-              <Input 
-                label="Email"
-                type="email" 
-                placeholder="Enter your email..."
-                helperText="We'll never share your email with anyone."
-              />
-              
-              <Input 
-                label="Password"
-                type="password" 
-                placeholder="Enter password..."
-                error="Password must be at least 8 characters"
-              />
-              
-              <Textarea 
-                label="Message"
-                placeholder="Enter your message here..."
-                rows={3}
-                helperText="Please be descriptive"
-              />
+                  <Input
+                    label="Email"
+                    type="email"
+                    placeholder="Enter your email..."
+                    helperText="We'll never share your email with anyone."
+                  />
+
+                  <Input
+                    label="Password"
+                    type="password"
+                    placeholder="Enter password..."
+                    error="Password must be at least 8 characters"
+                  />
+
+                  <Textarea
+                    label="Message"
+                    placeholder="Enter your message here..."
+                    rows={3}
+                    helperText="Please be descriptive"
+                  />
                 </div>
               </div>
             </div>
@@ -188,7 +188,7 @@ export default function Page() {
               <Button size="sm" variant="primary">Action</Button>
             </CardFooter>
           </Card>
-          
+
           <Card variant="elevated">
             <CardHeader>
               <CardTitle>Elevated Card</CardTitle>
@@ -200,7 +200,7 @@ export default function Page() {
               <Badge variant="success">Active</Badge>
             </CardFooter>
           </Card>
-          
+
           <Card variant="outline">
             <CardHeader>
               <CardTitle>Outline Card</CardTitle>
@@ -221,63 +221,63 @@ export default function Page() {
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
-            
-            {/* Dialog */}
-            <div>
-              <h3 className="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100">Dialog</h3>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="primary">Open Dialog</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogTitle>Dialog Title</DialogTitle>
-                  <DialogDescription>
-                    This is a sample dialog created with our wrapped Radix UI components.
-                  </DialogDescription>
-                  <DialogActions>
-                    <DialogClose asChild>
-                      <Button variant="ghost">Cancel</Button>
-                    </DialogClose>
-                    <DialogClose asChild>
-                      <Button variant="primary">Confirm</Button>
-                    </DialogClose>
-                  </DialogActions>
-                </DialogContent>
-              </Dialog>
-            </div>
 
-            <Separator />
+              {/* Dialog */}
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100">Dialog</h3>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="primary">Open Dialog</Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle>Dialog Title</DialogTitle>
+                    <DialogDescription>
+                      This is a sample dialog created with our wrapped Radix UI components.
+                    </DialogDescription>
+                    <DialogActions>
+                      <DialogClose asChild>
+                        <Button variant="ghost">Cancel</Button>
+                      </DialogClose>
+                      <DialogClose asChild>
+                        <Button variant="primary">Confirm</Button>
+                      </DialogClose>
+                    </DialogActions>
+                  </DialogContent>
+                </Dialog>
+              </div>
 
-            {/* Checkbox and Switch */}
-            <div className="space-y-4">
-              <Checkbox 
-                id="checkbox"
-                label="Accept terms and conditions"
-              />
+              <Separator />
 
-              <Switch 
-                id="notifications"
-                label="Enable notifications"
-              />
-            </div>
+              {/* Checkbox and Switch */}
+              <div className="space-y-4">
+                <Checkbox
+                  id="checkbox"
+                  label="Accept terms and conditions"
+                />
 
-            <Separator />
+                <Switch
+                  id="notifications"
+                  label="Enable notifications"
+                />
+              </div>
 
-            {/* Dropdown Menu */}
-            <div>
-              <h3 className="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100">Dropdown Menu</h3>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="secondary">Options ▼</Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem variant="destructive">Logout</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+              <Separator />
+
+              {/* Dropdown Menu */}
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100">Dropdown Menu</h3>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="secondary">Options ▼</Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                    <DropdownMenuItem>Settings</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem variant="destructive">Logout</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -294,45 +294,45 @@ export default function Page() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <Input 
+              <Input
                 id="name"
                 label="Name"
-                type="text" 
+                type="text"
                 placeholder="Enter your name..."
               />
-              <Input 
+              <Input
                 id="email"
                 label="Email"
-                type="email" 
+                type="email"
                 placeholder="Enter your email..."
               />
-              <Input 
+              <Input
                 id="phone"
                 label="Phone"
-                type="tel" 
+                type="tel"
                 placeholder="Enter your phone..."
               />
-              <Textarea 
+              <Textarea
                 id="address"
                 label="Address"
                 rows={3}
                 placeholder="Enter your address..."
               />
-              
-              <Textarea 
+
+              <Textarea
                 id="notes"
                 label="Notes"
                 rows={4}
                 placeholder="Enter any additional notes..."
               />
-              
-              <Input 
+
+              <Input
                 id="bottom-input"
                 label="Bottom Input (Test Scroll)"
-                type="text" 
+                type="text"
                 placeholder="This input tests keyboard avoiding at bottom of form..."
               />
-              
+
               <Button variant="primary" className="w-full">
                 Submit Form
               </Button>
@@ -348,29 +348,29 @@ export default function Page() {
           <CardContent>
             <ListGroup>
               <ListItem>
-                <ListItemText 
-                  primary="List Item 1" 
+                <ListItemText
+                  primary="List Item 1"
                   secondary="Description for first item"
                 />
                 <Badge variant="primary">Primary</Badge>
               </ListItem>
               <ListItem>
-                <ListItemText 
-                  primary="List Item 2" 
+                <ListItemText
+                  primary="List Item 2"
                   secondary="Description for second item"
                 />
                 <Badge variant="success">Active</Badge>
               </ListItem>
               <ListItem>
-                <ListItemText 
-                  primary="List Item 3" 
+                <ListItemText
+                  primary="List Item 3"
                   secondary="Description for third item"
                 />
                 <Badge variant="error">Error</Badge>
               </ListItem>
               <ListItem onClick={() => console.log('Clicked!')}>
-                <ListItemText 
-                  primary="Clickable Item" 
+                <ListItemText
+                  primary="Clickable Item"
                   secondary="This item responds to clicks"
                 />
                 <Badge variant="info">Info</Badge>
@@ -378,7 +378,7 @@ export default function Page() {
             </ListGroup>
           </CardContent>
         </Card>
-        
+
         {/* Badge Examples */}
         <Card className="mb-6">
           <CardHeader>
@@ -449,7 +449,7 @@ export default function Page() {
             </div>
           </CardContent>
         </Card>
-        
+
         {/* Advanced Components */}
         <Card className="mb-6">
           <CardHeader>
@@ -488,9 +488,9 @@ export default function Page() {
                   />
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               {/* Select */}
               <div>
                 <h4 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Select</h4>
@@ -519,17 +519,17 @@ export default function Page() {
                   />
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               {/* Tooltips */}
               <div>
                 <h4 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Tooltips</h4>
-                <div className="flex space-x-4">
+                <div className="flex flex-wrap gap-4">
                   <SimpleTooltip text="This is a simple tooltip">
                     <Button variant="outline">Hover me</Button>
                   </SimpleTooltip>
-                  
+
                   <Tooltip content={
                     <div>
                       <strong>Rich Content</strong>
@@ -538,23 +538,23 @@ export default function Page() {
                   }>
                     <Button variant="primary">Rich Tooltip</Button>
                   </Tooltip>
-                  
+
                   <Tooltip content="Left side tooltip" side="left">
                     <Button variant="secondary">Left</Button>
                   </Tooltip>
-                  
+
                   <Tooltip content="Right side tooltip" side="right">
                     <Button variant="ghost">Right</Button>
                   </Tooltip>
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               {/* Popovers */}
               <div>
                 <h4 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Popovers</h4>
-                <div className="flex space-x-4">
+                <div className="flex flex-wrap gap-4">
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button variant="outline">Open Popover</Button>
@@ -570,7 +570,7 @@ export default function Page() {
                       </div>
                     </PopoverContent>
                   </Popover>
-                  
+
                   <ConfirmPopover
                     title="Delete Item"
                     description="Are you sure you want to delete this item? This action cannot be undone."
@@ -582,9 +582,9 @@ export default function Page() {
                   </ConfirmPopover>
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               {/* Date Picker */}
               <div>
                 <h4 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Date Picker</h4>
@@ -605,7 +605,7 @@ export default function Page() {
             </div>
           </CardContent>
         </Card>
-        
+
         {/* Material-UI Style Components */}
         <Card className="mb-6">
           <CardHeader>
@@ -627,7 +627,7 @@ export default function Page() {
                       <Chip label="Error" color="error" />
                     </div>
                   </div>
-                  
+
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Outlined Chips:</p>
                     <div className="flex flex-wrap gap-2">
@@ -636,27 +636,27 @@ export default function Page() {
                       <Chip label="Success" variant="outlined" color="success" />
                     </div>
                   </div>
-                  
+
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Interactive Chips:</p>
                     <div className="flex flex-wrap gap-2">
-                      <Chip 
-                        label="Clickable" 
-                        clickable 
-                        onClick={() => console.log('Chip clicked')} 
+                      <Chip
+                        label="Clickable"
+                        clickable
+                        onClick={() => console.log('Chip clicked')}
                       />
-                      <Chip 
-                        label="Deletable" 
-                        deletable 
-                        onDelete={() => console.log('Chip deleted')} 
+                      <Chip
+                        label="Deletable"
+                        deletable
+                        onDelete={() => console.log('Chip deleted')}
                       />
-                      <Chip 
-                        label="With Icon" 
+                      <Chip
+                        label="With Icon"
                         icon={<HeartIcon />}
                         color="error"
                       />
-                      <AvatarChip 
-                        label="Avatar Chip" 
+                      <AvatarChip
+                        label="Avatar Chip"
                         avatarFallback="AC"
                         color="info"
                       />
@@ -664,9 +664,9 @@ export default function Page() {
                   </div>
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               {/* Alerts */}
               <div>
                 <h4 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Alerts</h4>
@@ -688,7 +688,7 @@ export default function Page() {
                       </ErrorAlert>
                     </div>
                   </div>
-                  
+
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Filled Alerts:</p>
                     <div className="space-y-2">
@@ -700,7 +700,7 @@ export default function Page() {
                       </Alert>
                     </div>
                   </div>
-                  
+
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Outlined Alerts:</p>
                     <div className="space-y-2">
@@ -714,9 +714,9 @@ export default function Page() {
                   </div>
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               {/* Progress */}
               <div>
                 <h4 className="font-medium mb-3 text-gray-900 dark:text-gray-100">Progress Indicators</h4>
@@ -730,10 +730,10 @@ export default function Page() {
                       <Progress value={90} color="error" showLabel label="Almost Complete" />
                     </div>
                   </div>
-                  
+
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Circular Progress:</p>
-                    <div className="flex items-center space-x-6">
+                    <div className="flex flex-wrap items-center gap-4">
                       <CircularProgress value={25} showLabel />
                       <CircularProgress value={50} color="success" size={50} showLabel />
                       <CircularProgress value={75} color="warning" size={60} thickness={6} showLabel />
@@ -741,7 +741,7 @@ export default function Page() {
                       <CircularProgress variant="indeterminate" color="info" size={30} />
                     </div>
                   </div>
-                  
+
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Indeterminate Progress:</p>
                     <div className="space-y-4">

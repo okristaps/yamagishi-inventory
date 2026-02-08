@@ -1,16 +1,18 @@
 'use client';
-import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
+import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from './ui/Button';
 import { ThemeToggle } from './ThemeToggle';
+import { HeaderProvider, useHeader } from './HeaderContext';
 import {
   HomeIcon,
   GearIcon,
   HamburgerMenuIcon,
   DashboardIcon,
   FileTextIcon,
-  ActivityLogIcon
+  ActivityLogIcon,
+  Cross1Icon
 } from '@radix-ui/react-icons';
 
 interface LayoutProps {
@@ -31,11 +33,10 @@ const navItems: NavItem[] = [
   { key: 'test', label: 'Test', icon: <ActivityLogIcon />, path: '/test' },
 ];
 
-export function Layout({ children }: LayoutProps) {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+function LayoutContent({ children }: LayoutProps) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
-  const sidebarRef = useRef<HTMLDivElement>(null);
-  const mainContentRef = useRef<HTMLDivElement>(null);
+  const { title, rightContent, subtitle } = useHeader();
 
   const isActive = (path: string) => {
     if (path === '/') {
@@ -44,85 +45,69 @@ export function Layout({ children }: LayoutProps) {
     return pathname.startsWith(path);
   };
 
-  const handleClickOutside = useCallback((event: MouseEvent) => {
-    if (
-      !sidebarCollapsed &&
-      sidebarRef.current &&
-      mainContentRef.current &&
-      !sidebarRef.current.contains(event.target as Node) &&
-      mainContentRef.current.contains(event.target as Node)
-    ) {
-      setSidebarCollapsed(true);
-    }
-  }, [sidebarCollapsed]);
+  const handleNavClick = () => {
+    setSidebarOpen(false);
+  };
 
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [handleClickOutside]);
+  const displayTitle = title || navItems.find(item => isActive(item.path))?.label || 'Home';
 
   return (
     <div className="layout-container bg-gray-50 dark:bg-dark-bg">
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       <div
-        ref={sidebarRef}
         className={`
-          sidebar flex flex-col bg-white dark:bg-dark-card border-r border-gray-200 dark:border-gray-700
-          transition-all duration-300 ease-in-out
-          ${sidebarCollapsed ? 'w-20' : 'w-64'}
+          sidebar-drawer
+          fixed top-0 left-0 bottom-0 w-72 z-50
+          flex flex-col bg-white dark:bg-dark-card border-r border-gray-200 dark:border-gray-700
+          transform transition-transform duration-300 ease-in-out
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          {!sidebarCollapsed && (
-            <div className="flex items-center space-x-2">
-              <FileTextIcon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-              <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+              <FileTextIcon className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                 Yamagishi
               </h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Inventory</p>
             </div>
-          )}
+          </div>
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            onClick={() => setSidebarOpen(false)}
             className="p-2"
           >
-            <HamburgerMenuIcon className="w-4 h-4" />
+            <Cross1Icon className="w-4 h-4" />
           </Button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-4">
+        <nav className="flex-1 overflow-y-auto p-3">
           <div className="space-y-1">
             {navItems.map((item) => {
               const active = isActive(item.path);
-              return sidebarCollapsed ? (
-                <div key={item.key} className="w-full flex justify-center mb-2">
-                  <Link href={item.path} className="inline-block">
-                    <div className={`
-                      w-20 h-18 rounded-lg flex items-center justify-center transition-colors duration-200
-                      ${active
-                        ? 'text-blue-600 dark:text-blue-400'
-                        : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-600 dark:hover:text-gray-400'
-                      }
-                    `}>
-                      <span className="w-12 h-12 flex items-center justify-center">{item.icon}</span>
-                    </div>
-                  </Link>
-                </div>
-              ) : (
-                <Link key={item.key} href={item.path}>
+              return (
+                <Link key={item.key} href={item.path} onClick={handleNavClick}>
                   <div className={`
-                    flex items-center space-x-4 px-4 py-4 rounded-lg cursor-pointer transition-colors duration-200
+                    flex items-center space-x-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-200
                     ${active
-                      ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-r-4 border-blue-500'
+                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                     }
                   `}>
-                    <span className={`flex-shrink-0 w-6 h-6 flex items-center justify-center ${active ? 'text-blue-500' : 'text-gray-400 dark:text-gray-500'}`}>
+                    <span className={`flex-shrink-0 w-5 h-5 flex items-center justify-center`}>
                       {item.icon}
                     </span>
-                    <span className="flex-1 font-medium text-lg">{item.label}</span>
+                    <span className="flex-1 font-medium">{item.label}</span>
                   </div>
                 </Link>
               );
@@ -130,26 +115,45 @@ export function Layout({ children }: LayoutProps) {
           </div>
         </nav>
 
-        {!sidebarCollapsed && (
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <div className="text-xs text-gray-500 dark:text-gray-400">
-                v5.1.0
-              </div>
-              <ThemeToggle />
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <div className="flex items-center justify-between">
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              v0.0.0
             </div>
+            <ThemeToggle />
           </div>
-        )}
+        </div>
       </div>
 
-      <div ref={mainContentRef} className="main-area">
-        <header className="header bg-white dark:bg-dark-card border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                {navItems.find(item => isActive(item.path))?.label || 'Home'}
-              </h2>
+      <div className="main-area">
+        <header className="header bg-white dark:bg-dark-card border-b border-gray-200 dark:border-gray-700">
+          <div className="header-inner flex items-center justify-between h-14 px-4">
+            <div className="flex items-center space-x-3 min-w-0 flex-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSidebarOpen(true)}
+                className="p-2 flex-shrink-0 -ml-2"
+              >
+                <HamburgerMenuIcon className="w-5 h-5" />
+              </Button>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate leading-tight">
+                  {displayTitle}
+                </h2>
+                {subtitle && (
+                  <p className="subtitle text-xs text-gray-500 dark:text-gray-400 truncate -mt-0.5">
+                    {subtitle}
+                  </p>
+                )}
+              </div>
             </div>
+
+            {rightContent && (
+              <div className="flex items-center space-x-2 flex-shrink-0 ml-2">
+                {rightContent}
+              </div>
+            )}
           </div>
         </header>
 
@@ -158,5 +162,13 @@ export function Layout({ children }: LayoutProps) {
         </main>
       </div>
     </div>
+  );
+}
+
+export function Layout({ children }: LayoutProps) {
+  return (
+    <HeaderProvider>
+      <LayoutContent>{children}</LayoutContent>
+    </HeaderProvider>
   );
 }

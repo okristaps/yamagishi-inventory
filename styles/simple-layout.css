@@ -1,4 +1,14 @@
-/* SIMPLE: Fixed positions that never move */
+/* Layout that works on all devices - phones, tablets, portrait & landscape */
+
+/* Safe area CSS variables */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* Fixed viewport - prevents all scrolling issues */
 html, body {
   position: fixed;
   top: 0;
@@ -8,8 +18,12 @@ html, body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  /* Use dynamic viewport height for mobile browsers */
+  height: 100dvh;
+  width: 100dvw;
 }
 
+/* Main layout container - full screen, no padding */
 .layout-container {
   position: fixed;
   top: 0;
@@ -17,30 +31,117 @@ html, body {
   right: 0;
   bottom: 0;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
-.sidebar {
-  position: relative;
-  flex-shrink: 0;
-  overflow-y: auto;
-}
-
+/* Main content area - takes full width */
 .main-area {
   position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  width: 100%;
+  min-height: 0; /* Important for flex children to scroll properly */
 }
 
+/* Header - fixed at top, doesn't scroll, edge to edge with inner padding */
 .header {
   position: relative;
   flex-shrink: 0;
+  z-index: 10;
+  /* Safe area padding for notches - header bg goes edge to edge */
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
 }
 
+/* Scrollable content area */
 .content {
   position: relative;
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0; /* Important for flex children to scroll properly */
+  /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  /* Prevent overscroll bounce */
+  overscroll-behavior: contain;
+  /* Safe area padding for notches and home indicator */
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+  padding-bottom: var(--safe-bottom);
+}
+
+/* Sidebar drawer - only bottom/left safe areas */
+.sidebar-drawer {
+  padding-bottom: var(--safe-bottom);
+  padding-left: var(--safe-left);
+}
+
+/* Tablet/Desktop adjustments - wider content area */
+@media (min-width: 768px) {
+  .content {
+    /* Center content on larger screens */
+    max-width: 100%;
+  }
+
+  .content > * {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Landscape phone - compact header */
+@media (max-height: 500px) and (orientation: landscape) {
+  .header {
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+  }
+
+  .header .header-inner {
+    height: 40px !important;
+  }
+
+  .header h2 {
+    font-size: 0.9rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .header .subtitle {
+    display: none !important;
+  }
+
+  /* Compact sidebar in landscape too */
+  .sidebar-drawer {
+    width: 260px !important;
+  }
+
+  .sidebar-drawer nav {
+    padding: 0.5rem !important;
+  }
+
+  .sidebar-drawer nav a > div {
+    padding: 0.5rem 0.75rem !important;
+  }
+}
+
+/* Prevent text selection during scroll on touch devices */
+@media (pointer: coarse) {
+  .content {
+    -webkit-user-select: none;
+    user-select: auto; /* Re-enable for text content */
+  }
+
+  /* But allow selection on text elements */
+  .content p,
+  .content span,
+  .content h1, .content h2, .content h3, .content h4, .content h5, .content h6,
+  .content input,
+  .content textarea {
+    -webkit-user-select: text;
+    user-select: text;
+  }
 }
