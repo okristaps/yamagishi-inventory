@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { ThemeToggle, SimpleThemeToggle } from '@/components/ThemeToggle';
 import { 
   Button, IconButton, ButtonGroup, Input, Textarea, Card, CardHeader, CardTitle, CardContent, CardFooter, Badge, 
@@ -33,51 +33,11 @@ export default function Page() {
     setTimeout(() => setLoading(false), 3000);
   };
 
-  useEffect(() => {
-    const handleFocus = (e: FocusEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-        // Add a small delay to ensure the keyboard has appeared
-        setTimeout(() => {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-          });
-        }, 300);
-      }
-    };
-
-    const handleResize = () => {
-      // Handle viewport changes when keyboard appears/disappears
-      if (document.activeElement && 
-          (document.activeElement.tagName === 'INPUT' || 
-           document.activeElement.tagName === 'TEXTAREA')) {
-        (document.activeElement as HTMLElement).scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-      }
-    };
-
-    document.addEventListener('focusin', handleFocus);
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
-      document.removeEventListener('focusin', handleFocus);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  // Removed keyboard avoidance that was shifting entire layout
 
   return (
-    <div ref={containerRef} className="w-full bg-gray-50 dark:bg-dark-bg p-4 pb-20 min-h-screen transition-colors">
+    <div ref={containerRef} className="p-6">
       <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">UI Components Test Page</h1>
-          <div className="flex items-center space-x-4">
-            <SimpleThemeToggle />
-            <ThemeToggle />
-          </div>
-        </div>
         
         {/* Reusable UI Components */}
         <Card className="mb-6">

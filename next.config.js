@@ -5,6 +5,17 @@ module.exports = {
   trailingSlash: true,
   basePath: '',
   allowedDevOrigins: ['192.168.1.101'],
+
+  compiler: {
+    removeConsole: true,
+  },
+
+  experimental: {
+    optimizePackageImports: ['@radix-ui/react-icons', '@radix-ui/react-dialog'],
+    webVitalsAttribution: ['CLS', 'LCP'],
+  },
+
+  poweredByHeader: false,
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {

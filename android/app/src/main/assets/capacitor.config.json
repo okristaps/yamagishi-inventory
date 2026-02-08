@@ -8,6 +8,11 @@
 		"SplashScreen": {
 			"launchShowDuration": 0
 		},
+		"StatusBar": {
+			"style": "Dark",
+			"backgroundColor": "#121212",
+			"overlaysWebView": true
+		},
 		"CapacitorSQLite": {
 			"iosDatabaseLocation": "Library/CapacitorDatabase",
 			"iosIsEncryption": true,
@@ -24,8 +29,5 @@
 			}
 		}
 	},
-	"cordova": {},
-	"server": {
-		"url": "http://192.168.1.101:8100"
-	}
+	"cordova": {}
 }

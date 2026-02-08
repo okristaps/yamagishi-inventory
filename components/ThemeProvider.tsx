@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -25,7 +25,14 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>('system');
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() => {
+    // Initialize with current state to prevent hydration mismatch
+    if (typeof window !== 'undefined') {
+      return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    }
+    return 'light';
+  });
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     // Load theme from localStorage on mount
@@ -33,9 +40,13 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     if (savedTheme) {
       setThemeState(savedTheme);
     }
+    setIsInitialized(true);
   }, []);
 
   useEffect(() => {
+    // Skip initial theme application if not initialized to prevent flash
+    if (!isInitialized) return;
+
     const updateResolvedTheme = () => {
       if (theme === 'system') {
         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -57,25 +68,47 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [theme]);
+  }, [theme, isInitialized]);
 
   useEffect(() => {
-    // Apply theme to document
+    // Only apply theme changes after initialization to prevent flashing
+    if (!isInitialized) return;
+    
+    // Apply theme to document with smooth transition
     const root = document.documentElement;
+    
+    // Add transition for smooth theme switching
+    root.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+    
     if (resolvedTheme === 'dark') {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
-  }, [resolvedTheme]);
+    
+    // Set color scheme
+    root.style.colorScheme = resolvedTheme;
+    
+    // Remove transition after a short delay
+    setTimeout(() => {
+      root.style.transition = '';
+    }, 300);
+  }, [resolvedTheme, isInitialized]);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
     localStorage.setItem('theme', newTheme);
   };
 
+  // Memoize context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
+    theme,
+    setTheme,
+    resolvedTheme
+  }), [theme, resolvedTheme]);
+
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   );

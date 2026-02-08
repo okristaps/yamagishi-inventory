@@ -15,6 +15,11 @@ body {
   scroll-behavior: smooth;
   /* Prevent scroll bounce on iOS */
   -webkit-overflow-scrolling: touch;
+  
+  /* Performance optimizations */
+  contain: layout style paint;
+  will-change: scroll-position;
+  transform: translateZ(0); /* Hardware acceleration */
 }
 
 /**

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
 export interface ChipProps {
@@ -164,10 +165,13 @@ export function AvatarChip({
   ...props 
 }: AvatarChipProps) {
   const avatar = avatarSrc ? (
-    <img 
+    <Image 
       src={avatarSrc} 
       alt={avatarAlt} 
-      className="w-full h-full object-cover"
+      width={24}
+      height={24}
+      className="w-full h-full object-cover rounded-full"
+      unoptimized={true}
     />
   ) : avatarFallback ? (
     <div className="w-full h-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xs font-medium">

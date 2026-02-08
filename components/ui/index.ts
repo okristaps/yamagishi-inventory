@@ -16,3 +16,4 @@ export * from './DatePicker';
 export * from './Chip';
 export * from './Alert';
 export * from './Progress';
+export * from './Sidebar';

@@ -1,0 +1,46 @@
+/* SIMPLE: Fixed positions that never move */
+html, body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.layout-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.sidebar {
+  position: relative;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.main-area {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.content {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+}
