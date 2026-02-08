@@ -1,0 +1,136 @@
+/* Android WebView specific optimizations */
+
+/* Simple approach: Fixed viewport, no scrolling */
+html, body {
+  height: 100vh !important;
+  width: 100vw !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important; /* No body/html scrolling ever */
+  position: relative !important;
+}
+
+/* App layout - flexbox but fixed dimensions */
+.app-layout {
+  display: flex !important;
+  height: 100vh !important;
+  width: 100vw !important;
+  overflow: hidden !important; /* No app-level scrolling */
+}
+
+/* Sidebar - normal flex item, never scrolls */
+.app-sidebar {
+  flex-shrink: 0 !important;
+  overflow: hidden !important; /* Sidebar never scrolls */
+}
+
+/* Main content container - normal flex item */
+.app-main {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important; /* Container never scrolls */
+}
+
+/* Header - fixed height, never scrolls */
+.app-header {
+  flex-shrink: 0 !important;
+  overflow: hidden !important; /* Header never scrolls */
+}
+
+/* ONLY the content area can scroll */
+.app-content {
+  flex: 1 !important;
+  overflow-y: auto !important; /* ONLY THIS SCROLLS */
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Override safe area insets */
+:root {
+  --safe-area-top: 0px !important;
+  --safe-area-bottom: 0px !important;
+  --safe-area-left: 0px !important;
+  --safe-area-right: 0px !important;
+}
+
+/* Improve touch responsiveness */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection only for inputs and content areas */
+input, textarea, [contenteditable] {
+  -webkit-user-select: auto;
+  user-select: auto;
+}
+
+/* Hardware acceleration for smooth animations */
+.animate-spin,
+.transition-all,
+.transition-colors,
+.transition-transform {
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize scrolling performance */
+.overflow-y-auto,
+.overflow-y-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Reduce repaints during theme transitions */
+.dark {
+  color-scheme: dark;
+}
+
+:root:not(.dark) {
+  color-scheme: light;
+}
+
+/* Memory optimization for large lists */
+.ui-virtual-list {
+  contain: strict;
+  content-visibility: auto;
+}
+
+/* Clean scrolling for content area */
+.app-content {
+  contain: layout style paint !important;
+  transform: translateZ(0) !important;
+}
+
+/* Ensure inputs scroll into view within their container only */
+input:focus, textarea:focus {
+  scroll-margin: 1rem;
+}
+
+/* Prevent zoom on input focus for better keyboard experience */
+input, textarea, select {
+  font-size: 16px !important; /* Prevents zoom on iOS */
+}
+
+/* Android WebView font rendering optimization */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Prevent layout shifts from loading states */
+.loading-container {
+  contain: layout style paint size;
+}
+
+/* Optimize image rendering on Android */
+img {
+  image-rendering: optimizeQuality;
+  image-rendering: -webkit-optimize-contrast;
+}

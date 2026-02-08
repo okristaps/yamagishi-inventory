@@ -8,6 +8,11 @@
     "SplashScreen": {
       "launchShowDuration": 0
     },
+    "StatusBar": {
+      "style": "Dark",
+      "backgroundColor": "#121212",
+      "overlaysWebView": true
+    },
     "CapacitorSQLite": {
       "iosDatabaseLocation": "Library/CapacitorDatabase",
       "iosIsEncryption": true,

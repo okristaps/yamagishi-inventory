@@ -30,16 +30,35 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@/components/*": ["components/*"],
-      "@/src/*": ["src/*"],
-      "@/database/*": ["src/database/*"],
-      "@/entities/*": ["src/database/entities/*"],
-      "@/repositories/*": ["src/database/repositories/*"],
-      "@/migrations/*": ["src/database/migrations/*"],
-      "@/styles/*": ["styles/*"],
-      "@/types/*": ["types/*"]
-    }
+      "@/*": [
+        "./*"
+      ],
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/src/*": [
+        "src/*"
+      ],
+      "@/database/*": [
+        "src/database/*"
+      ],
+      "@/entities/*": [
+        "src/database/entities/*"
+      ],
+      "@/repositories/*": [
+        "src/database/repositories/*"
+      ],
+      "@/migrations/*": [
+        "src/database/migrations/*"
+      ],
+      "@/styles/*": [
+        "styles/*"
+      ],
+      "@/types/*": [
+        "types/*"
+      ]
+    },
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",

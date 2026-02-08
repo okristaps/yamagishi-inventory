@@ -4,10 +4,18 @@ module.exports = {
   output: 'export',
   trailingSlash: true,
   basePath: '',
-  experimental: {
-    esmExternals: 'loose',
-  },
   allowedDevOrigins: ['192.168.1.101'],
+
+  compiler: {
+    removeConsole: true,
+  },
+
+  experimental: {
+    optimizePackageImports: ['@radix-ui/react-icons', '@radix-ui/react-dialog'],
+    webVitalsAttribution: ['CLS', 'LCP'],
+  },
+
+  poweredByHeader: false,
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -70,7 +78,6 @@ module.exports = {
     ],
     unoptimized: true,
   },
-  swcMinify: true,
   transpilePackages: [
     '@ionic/react',
     '@ionic/core',

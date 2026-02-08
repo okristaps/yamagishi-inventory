@@ -3,10 +3,6 @@ declare module '*.css' {
   export default content;
 }
 
-declare module '@ionic/react/css/*' {
-  const content: any;
-  export default content;
-}
 
 declare module 'tailwindcss/tailwind.css' {
   const content: any;
