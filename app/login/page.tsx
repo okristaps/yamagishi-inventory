@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { AuthService } from '@/api/auth.api';
 import { Alert } from '@/components/ui/Alert';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { FileTextIcon } from '@radix-ui/react-icons';
+import Image from 'next/image';
 
 const PIN_LENGTH = 4;
 
@@ -81,13 +81,8 @@ export default function LoginPage() {
       </div>
 
       <div className="w-full max-w-xs">
-        <div className="text-center mb-10">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-            <FileTextIcon className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            {t('login.title')}
-          </h1>
+        <div className="text-center mb-6">
+          <Image src="/logo.png" alt="Yamagishi" width={160} height={160} className="mx-auto mb-4 rounded-2xl" />
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {t('login.subtitle')}
           </p>

@@ -1,8 +1,8 @@
 import React from 'react';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'destructive' | 'ghost' | 'success' | 'warning' | 'info' | 'text' | 'link';
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'primary' | 'secondary' | 'outline' | 'destructive' | 'ghost' | 'danger-ghost' | 'success' | 'warning' | 'info' | 'text' | 'link' | 'numpad';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'numpad';
   fullWidth?: boolean;
   loading?: boolean;
   leftIcon?: React.ReactNode;
@@ -30,11 +30,13 @@ export function Button({
     outline: 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500',
     destructive: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 dark:bg-red-500 dark:hover:bg-red-600 shadow-sm hover:shadow-md',
     ghost: 'text-gray-600 hover:bg-gray-100 focus:ring-gray-500 dark:text-gray-400 dark:hover:bg-gray-800',
+    'danger-ghost': 'text-red-600 bg-red-100 hover:text-red-700 hover:bg-red-200 focus:ring-red-500 dark:text-red-400 dark:bg-red-900/30 dark:hover:text-red-300 dark:hover:bg-red-900/50',
     success: 'bg-green-600 hover:bg-green-700 text-white focus:ring-green-500 dark:bg-green-500 dark:hover:bg-green-600 shadow-sm hover:shadow-md',
     warning: 'bg-yellow-500 hover:bg-yellow-600 text-white focus:ring-yellow-500 dark:bg-yellow-600 dark:hover:bg-yellow-700 shadow-sm hover:shadow-md',
     info: 'bg-cyan-600 hover:bg-cyan-700 text-white focus:ring-cyan-500 dark:bg-cyan-500 dark:hover:bg-cyan-600 shadow-sm hover:shadow-md',
     text: 'text-blue-600 hover:text-blue-700 hover:bg-blue-50 focus:ring-blue-500 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/20',
-    link: 'text-blue-600 hover:text-blue-700 underline-offset-4 hover:underline focus:ring-blue-500 dark:text-blue-400 dark:hover:text-blue-300'
+    link: 'text-blue-600 hover:text-blue-700 underline-offset-4 hover:underline focus:ring-blue-500 dark:text-blue-400 dark:hover:text-blue-300',
+    numpad: 'bg-white dark:bg-dark-card text-gray-900 dark:text-gray-100 shadow-sm border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 active:scale-95 focus:ring-gray-500'
   };
   
   const sizeClasses = {
@@ -42,7 +44,8 @@ export function Button({
     sm: 'px-3 py-1.5 text-sm min-h-[32px]',
     md: 'px-4 py-2 text-sm min-h-[40px]',
     lg: 'px-6 py-3 text-base min-h-[48px]',
-    xl: 'px-8 py-4 text-lg min-h-[56px]'
+    xl: 'px-8 py-4 text-lg min-h-[56px]',
+    numpad: 'w-[72px] h-[72px] min-h-0 p-0 text-2xl rounded-full'
   };
   
   const iconSizes = {

@@ -1,9 +1,15 @@
 'use client';
-import { useEffect, useState, useRef } from 'react';
+import { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { AuthService } from '@/api/auth.api';
+import { AuthService, UserData } from '@/api/auth.api';
 import { Layout } from '@/components/Layout';
 import { AuthState } from '@/types/auth';
+
+const UserContext = createContext<UserData | null>(null);
+
+export function useUser() {
+  return useContext(UserContext);
+}
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -20,6 +26,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [authState, setAuthState] = useState<AuthState>(AuthState.CHECKING);
+  const [user, setUser] = useState<UserData | null>(null);
   const isCheckingRef = useRef(false);
 
   useEffect(() => {
@@ -35,6 +42,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (!loggedIn && !isPublic) {
           router.replace('/login');
           setAuthState(AuthState.UNAUTHENTICATED);
+          setUser(null);
           return;
         }
 
@@ -43,10 +51,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
           return;
         }
 
+        if (loggedIn) {
+          const userData = await AuthService.getUserData();
+          setUser(userData);
+        }
+
         setAuthState(loggedIn ? AuthState.AUTHENTICATED : AuthState.UNAUTHENTICATED);
       } catch (error) {
         console.error('Auth check error:', error);
         setAuthState(AuthState.UNAUTHENTICATED);
+        setUser(null);
         if (!isPublic) {
           router.replace('/login');
         }
@@ -70,5 +84,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     );
   }
 
-  return <Layout>{children}</Layout>;
+  return (
+    <UserContext.Provider value={user}>
+      <Layout>{children}</Layout>
+    </UserContext.Provider>
+  );
 }
