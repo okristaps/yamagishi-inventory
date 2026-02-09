@@ -1,4 +1,12 @@
 {
+  "login": {
+    "title": "Yamagishi Inventory",
+    "subtitle": "Enter your PIN to continue",
+    "signingIn": "Signing in...",
+    "incorrectPin": "Incorrect PIN",
+    "loginFailed": "Login failed",
+    "clear": "Clear"
+  },
   "app": {
     "title": "Yamagishi Inventory",
     "users": "Users",
@@ -40,6 +48,58 @@
     "error": "Error",
     "success": "Success",
     "cancel": "Cancel",
-    "ok": "OK"
+    "ok": "OK",
+    "delete": "Delete",
+    "actions": "Actions",
+    "execute": "Execute",
+    "clear": "Clear",
+    "search": "Search...",
+    "noRows": "No rows",
+    "noMatchingRows": "No matching rows",
+    "showing": "Showing",
+    "of": "of",
+    "rows": "Rows:"
+  },
+  "debug": {
+    "title": "Debug",
+    "subtitle": "SQLite Database Manager",
+    "databaseConnected": "Database Connected",
+    "connectionError": "Connection Error",
+    "checking": "Checking...",
+    "tables": "Tables",
+    "noTablesFound": "No tables found",
+    "customQuery": "Custom SQL Query",
+    "queryPlaceholder": "SELECT * FROM users WHERE id = 1",
+    "queryExecuted": "Query executed. Affected rows:",
+    "rowsReturned": "row(s) returned",
+    "queryResults": "Query Results",
+    "data": "Data",
+    "searchAllColumns": "Search all columns...",
+    "deleteRow": "Delete Row",
+    "deleteRowConfirm": "Delete row with id={{id}}?",
+    "failedToInitialize": "Failed to initialize database",
+    "failedToLoadTables": "Failed to load tables",
+    "failedToLoadData": "Failed to load data",
+    "queryFailed": "Query failed",
+    "failedToDelete": "Failed to delete row"
+  },
+  "table": {
+    "search": "Search...",
+    "noRows": "No rows",
+    "previous": "Previous page",
+    "next": "Next page"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "App configuration",
+    "dataSync": "Data Sync",
+    "users": "Users",
+    "sync": "Sync",
+    "syncing": "Syncing...",
+    "syncedUsers": "Synced {{count}} users",
+    "syncFailed": "Sync failed"
+  },
+  "dashboard": {
+    "title": "Dashboard"
   }
 }

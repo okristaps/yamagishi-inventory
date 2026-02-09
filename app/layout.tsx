@@ -9,8 +9,9 @@ import '../styles/global.css';
 import '../styles/variables.css';
 import '../styles/simple-layout.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { Layout } from '@/components/Layout';
 import { KeyboardHandler } from '@/components/KeyboardHandler';
+import { AuthProvider } from '@/components/AuthProvider';
+import { QueryProvider } from '@/components/QueryProvider';
 
 
 export default function RootLayout({
@@ -54,11 +55,13 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning={true}>
         <KeyboardHandler />
-        <ThemeProvider>
-          <Layout>
-            {children}
-          </Layout>
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

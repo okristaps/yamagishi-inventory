@@ -39,6 +39,15 @@
       "@/src/*": [
         "src/*"
       ],
+      "@/api": [
+        "src/api/index.ts"
+      ],
+      "@/api/*": [
+        "src/api/*"
+      ],
+      "@/services/*": [
+        "src/services/*"
+      ],
       "@/database/*": [
         "src/database/*"
       ],

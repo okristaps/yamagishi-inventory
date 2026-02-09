@@ -1,18 +1,21 @@
 'use client';
 import React, { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from './ui/Button';
 import { ThemeToggle } from './ThemeToggle';
 import { HeaderProvider, useHeader } from './HeaderContext';
+import { AuthService } from '@/api/auth.api';
 import {
-  HomeIcon,
   GearIcon,
   HamburgerMenuIcon,
   DashboardIcon,
   FileTextIcon,
   ActivityLogIcon,
-  Cross1Icon
+  Cross1Icon,
+  CodeIcon,
+  ExitIcon,
+  ComponentInstanceIcon
 } from '@radix-ui/react-icons';
 
 interface LayoutProps {
@@ -24,19 +27,28 @@ interface NavItem {
   label: string;
   icon: React.ReactNode;
   path: string;
+  devOnly?: boolean;
 }
 
 const navItems: NavItem[] = [
-  { key: 'home', label: 'Home', icon: <HomeIcon />, path: '/' },
   { key: 'dashboard', label: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
   { key: 'settings', label: 'Settings', icon: <GearIcon />, path: '/settings' },
   { key: 'test', label: 'Test', icon: <ActivityLogIcon />, path: '/test' },
+  { key: 'debug', label: 'Debug', icon: <CodeIcon />, path: '/debug' },
+  { key: 'ui-library', label: 'UI Library', icon: <ComponentInstanceIcon />, path: '/ui-library', devOnly: true },
 ];
 
 function LayoutContent({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const { title, rightContent, subtitle } = useHeader();
+
+  const handleLogout = async () => {
+    setSidebarOpen(false);
+    await AuthService.logout();
+    router.replace('/login');
+  };
 
   const isActive = (path: string) => {
     if (path === '/') {
@@ -49,7 +61,9 @@ function LayoutContent({ children }: LayoutProps) {
     setSidebarOpen(false);
   };
 
-  const displayTitle = title || navItems.find(item => isActive(item.path))?.label || 'Home';
+  const isDev = process.env.NODE_ENV === 'development';
+  const visibleNavItems = navItems.filter(item => !item.devOnly || isDev);
+  const displayTitle = title || visibleNavItems.find(item => isActive(item.path))?.label || 'Dashboard';
 
   return (
     <div className="layout-container bg-gray-50 dark:bg-dark-bg">
@@ -93,7 +107,7 @@ function LayoutContent({ children }: LayoutProps) {
 
         <nav className="flex-1 overflow-y-auto p-3">
           <div className="space-y-1">
-            {navItems.map((item) => {
+            {visibleNavItems.map((item) => {
               const active = isActive(item.path);
               return (
                 <Link key={item.key} href={item.path} onClick={handleNavClick}>
@@ -116,6 +130,15 @@ function LayoutContent({ children }: LayoutProps) {
         </nav>
 
         <div className="p-4 border-t border-gray-200 dark:border-gray-700 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <button
+            onClick={handleLogout}
+            className="flex items-center space-x-3 w-full px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 mb-3"
+          >
+            <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center">
+              <ExitIcon />
+            </span>
+            <span className="flex-1 font-medium text-left">Logout</span>
+          </button>
           <div className="flex items-center justify-between">
             <div className="text-xs text-gray-500 dark:text-gray-400">
               v0.0.0
