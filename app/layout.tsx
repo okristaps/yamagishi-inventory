@@ -12,6 +12,7 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { KeyboardHandler } from '@/components/KeyboardHandler';
 import { AuthProvider } from '@/components/AuthProvider';
 import { QueryProvider } from '@/components/QueryProvider';
+import { ToastProvider } from '@/components/ui/Toast';
 
 
 export default function RootLayout({
@@ -57,9 +58,11 @@ export default function RootLayout({
         <KeyboardHandler />
         <QueryProvider>
           <ThemeProvider>
-            <AuthProvider>
-              {children}
-            </AuthProvider>
+            <ToastProvider>
+              <AuthProvider>
+                {children}
+              </AuthProvider>
+            </ToastProvider>
           </ThemeProvider>
         </QueryProvider>
       </body>

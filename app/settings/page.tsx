@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePageHeader } from '@/components/HeaderContext';
-import { Button } from '@/components/ui/Button';
+import { Button, Page } from '@/components/ui';
 import { UsersService } from '@/services/usersService';
 import { ReloadIcon, PersonIcon } from '@radix-ui/react-icons';
 
@@ -44,7 +44,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="p-4">
+    <Page>
       <div className="space-y-4">
         <div className="bg-white dark:bg-dark-card rounded-xl p-4 border border-gray-200 dark:border-gray-700">
           <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-3">{t('settings.dataSync')}</h3>
@@ -77,6 +77,6 @@ export default function Settings() {
           </div>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

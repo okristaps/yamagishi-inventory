@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { usePageHeader } from '@/components/HeaderContext';
 import { ThemeToggle, SimpleThemeToggle } from '@/components/ThemeToggle';
 import {
-  Button, IconButton, ButtonGroup, Input, Textarea, Card, CardHeader, CardTitle, CardContent, CardFooter, Badge,
+  Button, IconButton, ButtonGroup, Input, Textarea, Card, CardHeader, CardTitle, CardContent, CardFooter, Badge, Page,
   ListGroup, ListItem, ListItemText, ListItemIcon,
   Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose, DialogActions,
   Checkbox, Switch, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator,
@@ -40,8 +40,8 @@ export default function UILibraryPage() {
   };
 
   return (
-    <div ref={containerRef} className="p-6">
-      <div className="max-w-4xl mx-auto">
+    <Page>
+      <div ref={containerRef} className="max-w-4xl mx-auto">
 
         {/* Reusable UI Components */}
         <Card className="mb-6">
@@ -669,6 +669,6 @@ export default function UILibraryPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </Page>
   );
 }

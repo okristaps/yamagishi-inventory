@@ -4,6 +4,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { AuthService, UserData } from '@/api/auth.api';
 import { Layout } from '@/components/Layout';
 import { AuthState } from '@/types/auth';
+import { useIdleMonitor } from '@/hooks';
+import { toast } from '@/components/ui/Toast';
+import { useTranslation } from 'react-i18next';
 
 const UserContext = createContext<UserData | null>(null);
 
@@ -28,6 +31,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [authState, setAuthState] = useState<AuthState>(AuthState.CHECKING);
   const [user, setUser] = useState<UserData | null>(null);
   const isCheckingRef = useRef(false);
+  const { t } = useTranslation();
+
+  useIdleMonitor({
+    enabled: authState === AuthState.AUTHENTICATED,
+    onIdle: () => {
+      toast.warning(t('common.sessionExpired'), t('common.loggedOutInactivity'));
+    },
+  });
 
   useEffect(() => {
     if (isCheckingRef.current) return;

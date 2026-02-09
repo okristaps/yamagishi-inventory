@@ -47,6 +47,8 @@
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
+    "sessionExpired": "Session expired",
+    "loggedOutInactivity": "You have been logged out due to inactivity",
     "cancel": "Cancel",
     "ok": "OK",
     "delete": "Delete",

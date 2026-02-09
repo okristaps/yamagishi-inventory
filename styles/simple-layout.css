@@ -67,9 +67,9 @@ html, body {
   -webkit-overflow-scrolling: touch;
   /* Prevent overscroll bounce */
   overscroll-behavior: contain;
-  /* Safe area padding for notches and home indicator */
-  padding-left: var(--safe-left);
-  padding-right: var(--safe-right);
+  /* Safe area padding for notches + consistent horizontal padding */
+  padding-left: calc(var(--safe-left) + 1rem);
+  padding-right: calc(var(--safe-right) + 1rem);
   padding-bottom: var(--safe-bottom);
 }
 

@@ -12,7 +12,6 @@ import {
   GearIcon,
   HamburgerMenuIcon,
   DashboardIcon,
-  ActivityLogIcon,
   Cross1Icon,
   CodeIcon,
   ExitIcon,
@@ -35,7 +34,6 @@ interface NavItem {
 const navItems: NavItem[] = [
   { key: 'dashboard', label: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
   { key: 'settings', label: 'Settings', icon: <GearIcon />, path: '/settings' },
-  { key: 'test', label: 'Test', icon: <ActivityLogIcon />, path: '/test' },
   { key: 'debug', label: 'Debug', icon: <CodeIcon />, path: '/debug' },
   { key: 'ui-library', label: 'UI Library', icon: <ComponentInstanceIcon />, path: '/ui-library', devOnly: true },
 ];

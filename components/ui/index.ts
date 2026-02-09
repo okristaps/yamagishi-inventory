@@ -18,3 +18,5 @@ export * from './Alert';
 export * from './Progress';
 export * from './Sidebar';
 export * from './Table';
+export * from './Toast';
+export * from './Page';

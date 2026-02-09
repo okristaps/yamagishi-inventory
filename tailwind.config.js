@@ -19,7 +19,26 @@ module.exports = {
           card: '#1e1e1e',
           input: '#2a2a2a',
         }
-      }
+      },
+      keyframes: {
+        slideIn: {
+          from: { transform: 'translateX(calc(100% + 1rem))' },
+          to: { transform: 'translateX(0)' },
+        },
+        slideOut: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(calc(100% + 1rem))' },
+        },
+        swipeOut: {
+          from: { transform: 'translateX(var(--radix-toast-swipe-end-x))' },
+          to: { transform: 'translateX(calc(100% + 1rem))' },
+        },
+      },
+      animation: {
+        slideIn: 'slideIn 200ms ease-out',
+        slideOut: 'slideOut 200ms ease-in',
+        swipeOut: 'swipeOut 100ms ease-out',
+      },
     },
   },
   plugins: [],

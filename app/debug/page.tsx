@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePageHeader } from '@/components/HeaderContext';
 import { AppDataSource, DatabaseService } from '@/database/typeorm.config';
+import { Page } from '@/components/ui';
 import {
   TableInfo,
   QueryResult,
@@ -178,7 +179,7 @@ export default function DebugPage() {
   const isQueryResult = !!(queryResult && queryResult.rows.length > 0);
 
   return (
-    <div className="p-4 space-y-4">
+    <Page className="space-y-4">
       <DatabaseStatus
         status={dbStatus}
         errorMessage={errorMessage}
@@ -210,6 +211,6 @@ export default function DebugPage() {
           onDeleteRow={deleteRow}
         />
       )}
-    </div>
+    </Page>
   );
 }
