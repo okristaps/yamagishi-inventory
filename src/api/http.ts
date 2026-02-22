@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { Preferences } from '@capacitor/preferences';
 
-const API_BASE_URL = 'https://cms.yamagishi.ch/api/';
+const API_BASE_URL = '';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
