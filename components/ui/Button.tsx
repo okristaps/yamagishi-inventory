@@ -53,7 +53,8 @@ export function Button({
     sm: 'w-4 h-4',
     md: 'w-4 h-4',
     lg: 'w-5 h-5',
-    xl: 'w-6 h-6'
+    xl: 'w-6 h-6',
+    numpad: 'w-6 h-6'
   };
   
   const disabledClasses = 'opacity-50 cursor-not-allowed hover:shadow-none';
