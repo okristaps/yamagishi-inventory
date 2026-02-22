@@ -60,6 +60,9 @@
       "@/migrations/*": [
         "src/database/migrations/*"
       ],
+      "@/config": [
+        "src/config.ts"
+      ],
       "@/styles/*": [
         "styles/*"
       ],

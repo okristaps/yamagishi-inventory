@@ -1,10 +1,9 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { Preferences } from '@capacitor/preferences';
-
-const API_BASE_URL = '';
+import { config } from '@/config';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: config.apiBaseUrl,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

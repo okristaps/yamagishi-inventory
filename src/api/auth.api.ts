@@ -1,7 +1,6 @@
 import { HTTP } from './http';
 import { Preferences } from '@capacitor/preferences';
-
-const LOGIN_ENDPOINT = '';
+import { config } from '@/config';
 
 export interface LoginResponse {
   status: 'ok' | 'error';
@@ -29,7 +28,7 @@ export class AuthService {
   static async login(pin: string): Promise<AuthResult> {
     try {
       const response = await HTTP.post<LoginResponse>(
-        LOGIN_ENDPOINT,
+        config.loginEndpoint,
         { pin },
         { timeout: 5000 },
       );
