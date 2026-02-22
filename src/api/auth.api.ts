@@ -1,7 +1,7 @@
 import { HTTP } from './http';
 import { Preferences } from '@capacitor/preferences';
 
-const LOGIN_ENDPOINT = 'logineAPpN8KM9yRmUsWVfzXHC2qFYTnu5ESw';
+const LOGIN_ENDPOINT = '';
 
 export interface LoginResponse {
   status: 'ok' | 'error';
